@@ -134,7 +134,6 @@
 	H.adjust_skillrank(/datum/skill/misc/sneaking, 5, TRUE)
 	H.adjust_skillrank(/datum/skill/misc/stealing, 5, TRUE)
 	H.adjust_skillrank(/datum/skill/misc/lockpicking, 5, TRUE) // not like they're gonna break into the vault.
-	H.change_stat("strength", -1)
 	H.change_stat("perception", 2)
 	H.change_stat("speed", 3)
 	H.change_stat("intelligence", 2)
