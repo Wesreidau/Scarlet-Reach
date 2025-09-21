@@ -5,7 +5,6 @@
 		//////////////////////
 	parent_type = /datum
 
-	authenticate = 0
 		////////////////
 		//ADMIN THINGS//
 		////////////////
@@ -51,6 +50,7 @@
 	var/list/nextspooky = 0
 
 	var/patreonlevel = -1
+	var/patreon_colored_say_allowed = FALSE
 
 		////////////
 		//SECURITY//

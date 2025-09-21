@@ -60,6 +60,8 @@
 				used = list('sound/vo/male/gen/hum (1).ogg','sound/vo/male/gen/hum (2).ogg','sound/vo/male/gen/hum (3).ogg')
 			if("jump")
 				used = 'sound/vo/male/gen/jump.ogg'
+			if("jump_fixed")
+				used = 'sound/vo/male/gen/jump.ogg'
 			if("laugh")
 				used = list('sound/vo/male/gen/laugh (2).ogg','sound/vo/male/gen/laugh (3).ogg','sound/vo/male/gen/laugh (4).ogg','sound/vo/male/gen/laugh (5).ogg','sound/vo/male/gen/laugh (6).ogg')
 			if("leap")
@@ -95,7 +97,7 @@
 			if("attnwhistle")
 				used = 'sound/vo/attn.ogg'
 			if("clap")
-				used = list('sound/vo/clap (1).ogg','sound/vo/clap (2).ogg','sound/vo/clap (3).ogg','sound/vo/clap (4).ogg')
+				used = list('sound/body/clap (1).ogg','sound/body/clap (2).ogg','sound/body/clap (3).ogg','sound/body/clap (4).ogg')
 			if("psst")
 				used = 'sound/vo/psst.ogg'
 			if("meow")
@@ -113,11 +115,11 @@
 			if("hoot")
 				used = list('sound/vo/mobs/bird/hoot.ogg')
 			if("snap")
-				used = list('sound/vo/fsnap1.ogg')
+				used = list('sound/body/fsnap1.ogg')
 			if("snap2")
-				used = list('sound/vo/fsnap2.ogg')
+				used = list('sound/body/fsnap2.ogg')
 			if("snap3")
-				used = list('sound/vo/fsnap3.ogg')
+				used = list('sound/body/fsnap3.ogg')
 			if("blink")
 				used = list('sound/vo/blink.ogg')
 			if("cackle")

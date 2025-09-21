@@ -121,8 +121,6 @@
 
 /datum/emote/living/carbon/human/wag
 	key = "wag"
-	key_third_person = "wags"
-	message = "wags their tail."
 
 /datum/emote/living/carbon/human/wag/run_emote(mob/user, params, type_override, intentional)
 	. = ..()
@@ -130,11 +128,11 @@
 		return
 	var/mob/living/carbon/human/H = user
 	if(!H.dna.species.is_wagging_tail(H))
+		H.visible_message(span_biginfo("<span style='color:#[H.voice_color];text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;'><b>[H]</b></span><span style='color: #c9c1ba;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;'> wags [H.p_their()] tail.</span>"), runechat_message = "wags [H.p_their()] tail")
 		H.dna.species.start_wagging_tail(H)
-		message = "stops wagging [H.p_their()] tail"
 	else
+		H.visible_message(span_biginfo("<span style='color:#[H.voice_color];text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;'><b>[H]</b></span></span><span style='color: #c9c1ba;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;'> stops wagging [H.p_their()] tail.</span>"), runechat_message = "stops wagging [H.p_their()] tail")
 		H.dna.species.stop_wagging_tail(H)
-		message = "wags [H.p_their()] tail."
 
 /datum/emote/living/carbon/human/wag/can_run_emote(mob/user, status_check = TRUE , intentional)
 	if(!..())
@@ -158,3 +156,40 @@
 
 /mob/living/carbon/human/proc/CloseWings()
 	return
+
+// FEEL EMOTE VERB
+/mob/living/carbon/human/verb/emote_feel()
+	set name = "Feel (Desire/Dread)"
+	set category = "Emotes"
+
+	var/list/options = list("Desire", "Dread")
+	var/choice = input(src, "What feeling do you want to express?", "Feel") as null|anything in options
+	if(!choice) return
+
+	var/list/degrees = list("mild", "moderate", "strong")
+	var/degree = input(src, "Select degree:", "Degree") as null|anything in degrees
+	if(!degree) return
+
+	if(choice == "Desire")
+		var/desire = input(src, "What is the desire?", "Desire") as null|text
+		if(isnull(desire)) return
+		var/message = "You [degree == "mild" ? "slightly" : degree == "moderate" ? "moderately" : "strongly"] want to help [src.real_name] fulfil their wish to [desire]"
+		if(!length(message) || copytext(message, length(message)) != ".")
+			message += "."
+		for(var/mob/living/carbon/human/H in viewers(src, null))
+			if(HAS_TRAIT(H, TRAIT_EMPATH))
+				to_chat(H, "<span style='color: white; font-style: italic; text-shadow: 0 0 6px #fff, 0 0 12px #fff;'>[message]</span>")
+		to_chat(src, "You desire [desire].")
+		return
+
+	if(choice == "Dread")
+		var/dread = input(src, "What are you dreading?", "Dread") as null|text
+		if(isnull(dread)) return
+		var/message = "You feel [degree]ly negatively preoccupied with the prospect of [dread]."
+		if(!length(message) || copytext(message, length(message)) != ".")
+			message += "."
+		for(var/mob/living/carbon/human/H in viewers(src, null))
+			if(HAS_TRAIT(H, TRAIT_EMPATH))
+				to_chat(H, "<span style='color: #ff4444; font-weight: bold;'>[message]</span>")
+		to_chat(src, "You become preoccupied with [dread].")
+		return

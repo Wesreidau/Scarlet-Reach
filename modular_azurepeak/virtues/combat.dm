@@ -46,6 +46,8 @@
 			recipient.mind?.special_items["Pestra Psycross"] = /obj/item/clothing/neck/roguetown/psicross/pestra
 		if(/datum/patron/divine/eora) 
 			recipient.mind?.special_items["Eora Psycross"] = /obj/item/clothing/neck/roguetown/psicross/eora
+		if(/datum/patron/divine/xylix) 
+			recipient.mind?.special_items["Xylix Psycross"] = /obj/item/clothing/neck/roguetown/psicross/xylix
 		if(/datum/patron/divine/noc)
 			recipient.mind?.special_items["Noc Psycross"] = /obj/item/clothing/neck/roguetown/psicross/noc
 		if(/datum/patron/divine/ravox)
@@ -53,6 +55,7 @@
 		if(/datum/patron/divine/malum)
 			recipient.mind?.special_items["Malum Psycross"] = /obj/item/clothing/neck/roguetown/psicross/malum
 		if(/datum/patron/old_god)
+			ADD_TRAIT(recipient, TRAIT_PSYDONITE, TRAIT_GENERIC)
 			recipient.mind?.special_items["Psydon Psycross"] = /obj/item/clothing/neck/roguetown/psicross
 
 /datum/virtue/combat/duelist
@@ -123,7 +126,7 @@
 /datum/virtue/combat/bowman
 	name = "Toxophilite"
 	desc = "I've had an interest in archery from a young age, and I always keep a spare bow and quiver around."
-	custom_text = "+1 to Bows, Up to Legendary, Minimum Apprentice"
+	custom_text = "+1 to Bows, Up to Journeyman, Minimum Apprentice"
 	added_stashed_items = list("Recurve Bow" = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve,
 								"Quiver (Arrows)" = /obj/item/quiver/arrows
 	)
@@ -132,7 +135,7 @@
 	if(recipient.get_skill_level(/datum/skill/combat/bows) < SKILL_LEVEL_APPRENTICE)
 		recipient.adjust_skillrank_up_to(/datum/skill/combat/bows, SKILL_LEVEL_APPRENTICE, silent = TRUE)
 	else
-		added_skills = list(list(/datum/skill/combat/bows, 1, 6))
+		added_skills = list(list(/datum/skill/combat/bows, 1, 3))
 /*/datum/virtue/combat/tavern_brawler
 	name = "Tavern Brawler"
 	desc = "I've never met a problem my fists couldn't solve."
@@ -157,6 +160,8 @@
 
 /datum/virtue/combat/rotcured/apply_to_human(mob/living/carbon/human/recipient)
 	recipient.update_body() // applies the rot skin tone stuff
+	recipient.dna.species.soundpack_m = new /datum/voicepack/male/rotman()
+	recipient.dna.species.soundpack_f = new /datum/voicepack/female/rotman()
 
 /datum/virtue/combat/dualwielder
 	name = "Dual Wielder"
@@ -168,3 +173,15 @@
 	desc = "Whether it's by having an annoying sibling that kept prodding me with a stick, or years of study and observation, I've become adept at both parrying and dodging stronger opponents, by learning their moves and studying them."
 	added_traits = list(TRAIT_SENTINELOFWITS)
 
+
+/datum/virtue/combat/hollow_life
+	name = "Hollow Lyfe"
+	desc = "Due to the events of the past, I have been rendered hollow, practically bereft of any lyfe. My heart doth not beat, neither do I draw any breath. As it stands, I am closer to the deadite than to the living."
+	added_traits = list(TRAIT_HOLLOW_LIFE, TRAIT_NOPAIN, TRAIT_NOPAINSTUN, TRAIT_NOBREATH, TRAIT_TOXIMMUNE, TRAIT_ZOMBIE_IMMUNE, TRAIT_NOHUNGER)
+	custom_text = span_bloody("CON IS ADJUSTED BY -2, SILVER WEAKNESS AND TENNITE MIRACLES SET YOU ON FIRE")
+
+/datum/virtue/combat/hollow_life/apply_to_human(mob/living/carbon/human/recipient)
+	recipient.change_stat(STATKEY_CON, -2)
+	recipient.mob_biotypes |= MOB_UNDEAD
+	recipient.dna.species.soundpack_m = new /datum/voicepack/hollow()
+	recipient.dna.species.soundpack_f = new /datum/voicepack/hollow_fem()

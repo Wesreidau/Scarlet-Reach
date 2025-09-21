@@ -112,6 +112,13 @@
 	med_pot = /datum/alch_cauldron_recipe/antidote
 	minor_pot = /datum/alch_cauldron_recipe/big_health_potion
 
+/obj/item/alch/tindust
+	name = "tin dust"
+	icon_state = "tindust"
+	major_pot = /datum/alch_cauldron_recipe/big_stam_poison
+	med_pot = /datum/alch_cauldron_recipe/big_mana_potion
+	minor_pot = /datum/alch_cauldron_recipe/strong_antidote
+
 /obj/item/alch/magicdust
 	name = "pure essentia"
 	icon_state = "magic_runedust"
@@ -130,7 +137,7 @@
 	name = "sinew"
 	icon_state = "sinew"
 	dropshrink = 0.9
-	major_pot = /datum/alch_cauldron_recipe/stam_poison
+	major_pot = /datum/alch_cauldron_recipe/aphrodisiac
 	med_pot = /datum/alch_cauldron_recipe/end_potion
 	minor_pot = /datum/alch_cauldron_recipe/health_potion
 
@@ -152,7 +159,7 @@
 	name = "swampweed dust"
 	icon_state = "swampdust"
 	major_pot = /datum/alch_cauldron_recipe/berrypoison
-	med_pot = /datum/alch_cauldron_recipe/big_stam_poison
+	med_pot = /datum/alch_cauldron_recipe/aphrodisiac
 	minor_pot = /datum/alch_cauldron_recipe/end_potion
 
 /obj/item/alch/tobaccodust
@@ -233,7 +240,7 @@
 	if(alert("Do you wish to change your self?", "Dust of Self", "Yes", "No") != "Yes")
 		return
 	user.visible_message(
-		span_warn("[user] begins to use [src]."), 
+		span_warn("[user] begins to use [src]."),
 		span_warn("I begin to apply [src] on myself.")
 	)
 	if(!do_after(user, 5 SECONDS))
@@ -318,7 +325,7 @@
 	icon_state = "euphrasia"
 
 	major_pot = /datum/alch_cauldron_recipe/spd_potion
-	med_pot = /datum/alch_cauldron_recipe/stam_poison
+	med_pot = /datum/alch_cauldron_recipe/aphrodisiac
 	minor_pot = /datum/alch_cauldron_recipe/int_potion
 
 /obj/item/alch/paris
@@ -351,7 +358,7 @@
 
 	major_pot = /datum/alch_cauldron_recipe/health_potion
 	med_pot = /datum/alch_cauldron_recipe/spd_potion
-	minor_pot = /datum/alch_cauldron_recipe/stamina_potion
+	minor_pot = /datum/alch_cauldron_recipe/aphrodisiac
 
 /obj/item/alch/salvia
 	name = "salvia"
@@ -396,7 +403,7 @@
 
 	major_pot = /datum/alch_cauldron_recipe/lck_potion
 	med_pot = /datum/alch_cauldron_recipe/spd_potion
-	minor_pot = /datum/alch_cauldron_recipe/health_potion
+	minor_pot = /datum/alch_cauldron_recipe/aphrodisiac
 
 /obj/item/alch/rosa
 	name = "rosa"

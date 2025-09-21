@@ -7,7 +7,7 @@
 //	where you would want the updater procs below to run
 
 //	This also works with decimals.
-#define SAVEFILE_VERSION_MAX	31
+#define SAVEFILE_VERSION_MAX	35
 
 /*
 SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Carn
@@ -51,6 +51,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(current_version < 31) // RAISE THIS TO SAVEFILE_VERSION_MAX (and make sure to add +1 to the version) EVERY TIME YOU ADD SERVER-CHANGING KEYBINDS LIKE CHANGING HOW SAY WORKS!!
 		force_reset_keybindings_direct(TRUE)
 		addtimer(CALLBACK(src, PROC_REF(force_reset_keybindings)), 30)
+	if(current_version < 35)
+		patreon_say_color = "ff7a05"
+		patreon_say_color_enabled = FALSE
 
 /datum/preferences/proc/update_character(current_version, savefile/S)
 	if(current_version < 19)
@@ -133,6 +136,27 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 			S["facial_style_name"]	>> facial_hairstyle
 	if(current_version < 30)
 		S["voice_color"]		>> voice_color
+	if(current_version < 33) // Update races
+		var/species_name
+		S["species"] >> species_name
+		testing("Save version < 33, updating [species_name].")
+		if(species_name)
+			var/newtype = GLOB.species_list[species_name]
+			if(!newtype)
+				if(species_name == "Sissean")
+					testing("Updating to Zardman.")
+					species_name = "Zardman"
+				if(species_name == "Saurian")
+					testing("Updating to Zardman.")
+					species_name = "Zardman"
+				else if(species_name == "Constructb")
+					testing("Updating to Golemb.")
+					species_name = "Golemb"
+				else if(findtext(species_name, "Metal Construct"))
+					testing("Updating to Golem.")
+					species_name = "Golem"
+
+		_load_species(S, species_name)
 
 /datum/preferences/proc/load_path(ckey,filename="preferences.sav")
 	if(!ckey)
@@ -181,10 +205,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["mastervol"]			>> mastervol
 	S["lastclass"]			>> lastclass
 	S["prefer_old_chat"]	>> prefer_old_chat
-	
-	// family_changes
-
-
 
 	S["default_slot"]		>> default_slot
 	S["chat_toggles"]		>> chat_toggles
@@ -208,6 +228,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["tip_delay"]			>> tip_delay
 	S["pda_style"]			>> pda_style
 	S["pda_color"]			>> pda_color
+
+	// Patreon-dependent settings
+	S["patreon_say_color"]			>> patreon_say_color
+	S["patreon_say_color_enabled"]	>> patreon_say_color_enabled
 
 	// Custom hotkeys
 	S["key_bindings"]		>> key_bindings
@@ -327,17 +351,17 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["pda_color"], pda_color)
 	WRITE_FILE(S["key_bindings"], key_bindings)
 	WRITE_FILE(S["prefer_old_chat"], prefer_old_chat)
-	
-	// family_changes
-
+	WRITE_FILE(S["patreon_say_color"], patreon_say_color)
+	WRITE_FILE(S["patreon_say_color_enabled"], patreon_say_color_enabled)
 	
 	return TRUE
 
 
-/datum/preferences/proc/_load_species(S)
-	var/species_name
+/datum/preferences/proc/_load_species(S, species_name = null)
 	testing("begin _load_species()")
-	S["species"] >> species_name
+	if(!species_name)
+		S["species"] >> species_name
+
 	if(species_name)
 		var/newtype = GLOB.species_list[species_name]
 		if(newtype)
@@ -412,6 +436,14 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if (preview_height)
 		preview_height = new preview_height()
 
+/datum/preferences/proc/_load_combat_music(S)
+	var/combat_music_type
+	S["combat_music"] >> combat_music_type
+	if (GLOB.cmode_tracks_by_type[combat_music_type])
+		combat_music = GLOB.cmode_tracks_by_type[combat_music_type]
+	else
+		combat_music = GLOB.cmode_tracks_by_type[default_cmusic_type]
+
 /datum/preferences/proc/_load_appearence(S)
 	S["real_name"]			>> real_name
 	S["gender"]				>> gender
@@ -443,6 +475,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["voice_type"]			>> voice_type
 	S["nickname"]			>> nickname
 	S["highlight_color"]	>> highlight_color
+	S["tail_color"]			>> tail_color
+	S["tail_markings_color"]>> tail_markings_color
+	S["tail_type"] 			>> tail_type
 
 /datum/preferences/proc/load_character(slot)
 	if(!path)
@@ -477,6 +512,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	_load_loadout(S)
 	_load_loadout2(S)
 	_load_loadout3(S)
+
+	_load_combat_music(S)
 
 	if(!S["features["mcolor"]"] || S["features["mcolor"]"] == "#000")
 		WRITE_FILE(S["features["mcolor"]"]	, "#FFF")
@@ -588,6 +625,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	features["mcolor3"]	= sanitize_hexcolor(features["mcolor3"], 6, 0)
 	features["ethcolor"]	= copytext(features["ethcolor"],1,7)
 	features["feature_lizard_legs"]	= sanitize_inlist(features["legs"], GLOB.legs_list, "Normal Legs")
+	tail_color = sanitize_hexcolor(tail_color, 6, 0)
+	tail_markings_color = sanitize_hexcolor(tail_markings_color, 6, 0)
 	S["body_markings"] >> body_markings
 	body_markings = SANITIZE_LIST(body_markings)
 	validate_body_markings()
@@ -615,24 +654,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["customizer_entries"] >> customizer_entries
 	validate_customizer_entries()
 
-	// family_changes
-	S["family"]					>> family
-	S["spouse_ckey"]			>> spouse_ckey
-	S["family_surname"]			>> family_surname
-	S["family_genitals"] 		>> family_genitals
-	S["allow_latejoin_family"] 	>> allow_latejoin_family
-	S["family_gender"] 			>> family_gender
-	S["family_species"] 		>> family_species
 
-	if(!islist(family_genitals) || !LAZYLEN(family_genitals))
-		family_genitals = list("Male", "Female", "Futa", "Cuntboy")
-	if(!islist(family_gender))
-		family_gender = list()
-	if(!islist(family_species))
-		family_species = list()
-	
-	// Validate family preference
-	family = sanitize_integer(family, FAMILY_NONE, FAMILY_FULL, initial(family))
 
 	return TRUE
 
@@ -675,6 +697,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["feature_ethcolor"]					, features["ethcolor"])
 	WRITE_FILE(S["nickname"]			, nickname)
 	WRITE_FILE(S["highlight_color"]		, highlight_color)
+	WRITE_FILE(S["tail_color"]			, tail_color)
+	WRITE_FILE(S["tail_markings_color"]			, tail_markings_color)
+	WRITE_FILE(S["tail_type"] , tail_type)
 
 	//Custom names
 	for(var/custom_name_id in GLOB.preferences_custom_names)
@@ -719,6 +744,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["statpack"] , statpack.type)
 	WRITE_FILE(S["virtue"] , virtue.type)
 	WRITE_FILE(S["virtuetwo"], virtuetwo.type)
+	WRITE_FILE(S["combat_music"], combat_music.type)
 	WRITE_FILE(S["body_size"] , features["body_size"])
 	if(loadout)
 		WRITE_FILE(S["loadout"] , loadout.type)
@@ -733,13 +759,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	else
 		WRITE_FILE(S["loadout3"] , null)
 
-	WRITE_FILE(S["family"] 				, family) // family_changes - основной переключатель семьи
-	WRITE_FILE(S["spouse_ckey"] 		, spouse_ckey) // family_changes - ckey второй половинки
-	WRITE_FILE(S["family_surname"] 		, family_surname) // family_changes - фамилия семьи
-	WRITE_FILE(S["family_genitals"] 	, family_genitals) // family_changes - проверка на половые органы партнёра
-	WRITE_FILE(S["allow_latejoin_family"] , allow_latejoin_family) // family_changes - разрешение создавать семью после начала раунда
-	WRITE_FILE(S["family_gender"] 		, family_gender) // family_changes - допустимые гендеры партнёра
-	WRITE_FILE(S["family_species"] 		, family_species) // family_changes - допустимые расы партнёра
+
 
 	return TRUE
 

@@ -26,7 +26,6 @@
 	/// Associated maniac key
 	var/inscryption_key
 
-	food_type = /obj/item/reagent_containers/food/snacks/organ/heart
 	sellprice = 25
 
 /obj/item/organ/heart/Destroy()
@@ -135,9 +134,9 @@
 				span_danger("I feel a terrible pain in my chest, as if my heart has stopped!"))
 		owner.set_heartattack(TRUE)
 		failed = TRUE
-/obj/item/organ/heart/construct
-	name = "construct core"
-	desc = "Swirling with a blessing of Astrata and pulsing with lux inside. This allows a construct to move."
+/obj/item/organ/heart/golem
+	name = "golem core"
+	desc = "Swirling with a blessing of Astrata and pulsing with lux inside. This allows a golem to move."
 	icon_state = "heartcon-on"
 	icon_base = "heartcon"
 

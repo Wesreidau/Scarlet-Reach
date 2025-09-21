@@ -11,7 +11,7 @@
 
 /obj/structure/flora/roguegrass/maneater/real
 	var/aggroed = 0
-	max_integrity = 100
+	max_integrity = 30
 	integrity_failure = 0.15
 	attacked_sound = list('sound/vo/mobs/plant/pain (1).ogg','sound/vo/mobs/plant/pain (2).ogg','sound/vo/mobs/plant/pain (3).ogg','sound/vo/mobs/plant/pain (4).ogg')
 	var/list/eatablez = list(/obj/item/bodypart, /obj/item/organ, /obj/item/reagent_containers/food/snacks/rogue/meat)
@@ -63,6 +63,8 @@
 			STOP_PROCESSING(SSobj, src)
 			return TRUE
 	for(var/mob/living/L in buckled_mobs)
+		if(L.stasis)//spit out our body if it's stored in a transform
+			unbuckle_mob(L)
 		if(world.time > last_eat + 50)
 			last_eat = world.time
 			L.flash_fullscreen("redflash3")
@@ -81,12 +83,16 @@
 							limb = C.get_bodypart(zone)
 							if(limb)
 								playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
-								limb.dismember()
-								qdel(limb)
-								seednutrition += 20
-								if(C.mind) // eat only one limb of things with minds
-									maneater_spit_out(C)
+								if(limb.dismember())
+									limb.drop_limb()
+									qdel(limb)
+									seednutrition += 20
+									if(C.mind) // eat only one limb of things with minds
+										maneater_spit_out(C)
 									return
+								if(!limb.dismemberable) //gib goblins right away as they cant be dismembered, meaning they will be stuck in infinit loop of being snatched and not dismembered
+									C.gib()
+									seednutrition += 50
 								return
 						if(C.mind) // nugget case, just spit them out
 							maneater_spit_out(C)
@@ -94,8 +100,9 @@
 						limb = C.get_bodypart(BODY_ZONE_HEAD)
 						if(limb)
 							playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
-							limb.dismember()
-							qdel(limb)
+							if(limb.dismember())
+								limb.drop_limb()
+								qdel(limb)
 							return
 						limb = C.get_bodypart(BODY_ZONE_CHEST)
 						if(limb)
@@ -247,7 +254,7 @@
 	desc = "Green and vivid. This one seems smaller than usual."
 	icon = 'icons/roguetown/mob/monster/maneater.dmi'
 	icon_state = "maneater-hidden"
-	max_integrity = 50
+	max_integrity = 15
 	seednutrition = 0
 	max_seednutrition = 50
 	var/growth_stage = 1
@@ -284,6 +291,8 @@
 			update_icon()
 			return TRUE
 	for(var/mob/living/L in buckled_mobs)
+		if(L.stasis)//spit out our body if it's stored in a transform
+			unbuckle_mob(L)
 		if(world.time > last_eat + 50)
 			last_eat = world.time
 			L.flash_fullscreen("redflash3")

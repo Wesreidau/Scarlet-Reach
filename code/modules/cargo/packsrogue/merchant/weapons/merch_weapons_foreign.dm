@@ -49,3 +49,24 @@
 	name = "Naginata"
 	cost = 80
 	contains = list(/obj/item/rogueweapon/spear/naginata)
+
+/datum/supply_pack/rogue/merc_weapons/katana
+	name = "Kazengun Straight Sword"
+	cost = 80
+	contains = list(/obj/item/rogueweapon/sword/sabre/mulyeog,
+					/obj/item/rogueweapon/scabbard/sword/kazengun)
+
+/datum/supply_pack/rogue/merc_weapons/miaodao
+	name = "Miaodao"
+	cost = 120
+	contains = list(/obj/item/rogueweapon/greatsword/miaodao)
+
+/datum/supply_pack/rogue/merc_weapons/tossbladekazengun
+	name = "Tossblade Belt, Eastern"
+	cost = 60
+	contains = list(/obj/item/storage/belt/rogue/leather/knifebelt/black/kazengun)
+
+/datum/supply_pack/rogue/merc_weapons/psysword
+	name = "Aged Psydonian Longsword"
+	cost = 80
+	contains = list(/obj/item/rogueweapon/sword/long/oldpsysword)

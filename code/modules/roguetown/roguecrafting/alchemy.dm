@@ -17,7 +17,7 @@
 	name = "ozium"
 	category = "Table"
 	result = list(/obj/item/reagent_containers/powder/ozium)
-	reqs = list(/obj/item/ash = 2, /datum/reagent/stampoison = 2, /obj/item/reagent_containers/food/snacks/grown/rogue/swampweeddry = 1)
+	reqs = list(/obj/item/ash = 2, /datum/reagent/toxin/stampoison = 2, /obj/item/reagent_containers/food/snacks/grown/rogue/swampweeddry = 1)
 	craftdiff = 2
 
 /datum/crafting_recipe/roguetown/alchemy/ozium_3x
@@ -26,7 +26,7 @@
 	result = list(/obj/item/reagent_containers/powder/ozium,
 					/obj/item/reagent_containers/powder/ozium,
 					/obj/item/reagent_containers/powder/ozium)
-	reqs = list(/obj/item/ash = 3, /datum/reagent/stampoison = 3, /obj/item/reagent_containers/food/snacks/grown/rogue/swampweeddry = 2)
+	reqs = list(/obj/item/ash = 3, /datum/reagent/toxin/stampoison = 3, /obj/item/reagent_containers/food/snacks/grown/rogue/swampweeddry = 2)
 	craftdiff = 3
 
 /datum/crafting_recipe/roguetown/alchemy/moon
@@ -67,12 +67,29 @@
 	reqs = list(/obj/item/reagent_containers/food/snacks/grown/rogue/fyritius/bloodied = 1, /datum/reagent/water/blessed = 45, /obj/item/natural/cloth = 1, /obj/item/alch/silverdust = 1)
 	craftdiff = 4
 
+/datum/crafting_recipe/roguetown/alchemy/qsabsolution
+	name = "absolving silver"
+	category = "Transmutation"
+	req_table = FALSE
+	result = list(/obj/item/quicksilver/luxinfused = 1)
+	reqs = list(/obj/item/reagent_containers/food/snacks/grown/rogue/fyritius/bloodied = 1, /datum/reagent/water/blessed = 45, /obj/item/natural/cloth = 1, /obj/item/alch/silverdust = 1)
+	craftdiff = 0
+	verbage_simple = "transmute"
+	structurecraft = null
+
 /datum/crafting_recipe/roguetown/alchemy/transisdust
 	name = "sui dust"
 	category = "Table"
 	result = list(/obj/item/alch/transisdust)
 	reqs = list(/obj/item/herbseed/taraxacum = 1, /obj/item/herbseed/euphrasia = 1, /obj/item/herbseed/hypericum = 1, /obj/item/herbseed/salvia = 1)
 	craftdiff = 3
+
+/datum/crafting_recipe/roguetown/alchemy/menthazig
+	name = "handmade mentha zig"
+	category = "Table"
+	result = list(/obj/item/clothing/mask/cigarette/rollie/mentha/crafted)
+	reqs = list(/obj/item/clothing/mask/cigarette/rollie/nicotine = 1, /obj/item/alch/mentha = 1)
+	craftdiff = 1
 
 //Hard to craft but feasable, will give ONE vial but that has 10 units so, enough to cure 2 people if they ration it.
 /datum/crafting_recipe/roguetown/alchemy/curerot
@@ -252,3 +269,19 @@
 	craftdiff = 6
 	verbage_simple = "transmute"
 
+/datum/crafting_recipe/roguetown/alchemy/frankenbrew
+	name = "Reanimation Elixir"
+	category = "Table"
+	result = list(
+		/obj/item/reagent_containers/glass/bottle/frankenbrew,
+		/obj/item/reagent_containers/glass/bottle/frankenbrew
+	)
+	reqs = list(
+		/obj/item/reagent_containers/glass/bottle = 2,
+		/obj/item/reagent_containers/food/snacks/grown/manabloom = 1,
+		/obj/item/reagent_containers/lux = 1,
+		/obj/item/alch/calendula = 1,
+		/datum/reagent/water = 98
+	)
+	craftdiff = 4
+	verbage_simple = "mix"

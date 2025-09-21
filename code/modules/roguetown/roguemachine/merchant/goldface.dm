@@ -66,7 +66,7 @@
 /obj/structure/roguemachine/goldface/public/examine()
 	. = ..()
 	. += "<span class='info'>A public version of the GOLDFACE. The guild charges a hefty fee for its usage. When locked, can be used to browse the inventory a merchant has.</span>"
-	. += "<span class='info'>An agreement between the Azurean Guild of Crafts and the Merchant's Guild mandates 100% extra profits on certain protected categories such as gems and steel gears when automated. And 50% on potions.</span>"
+	. += "<span class='info'>An agreement between the Scarlet Guild of Crafts and the Merchant's Guild mandates 100% extra profits on certain protected categories such as gems and steel gears when automated. And 50% on potions.</span>"
 
 /obj/structure/roguemachine/goldface/Initialize()
 	. = ..()
@@ -92,14 +92,22 @@
 		else
 			to_chat(user, span_warning("Wrong key."))
 			return
-	if(istype(P, /obj/item/storage/keyring))
-		var/obj/item/storage/keyring/K = P
-		for(var/obj/item/roguekey/KE in K.keys)
+	else if(istype(P, /obj/item/storage/keyring))
+		var/right_key = FALSE
+		for(var/obj/item/roguekey/KE in P.contents)
 			if(KE.lockid == lockid)
+				right_key = TRUE
 				locked = !locked
 				playsound(loc, 'sound/misc/gold_misc.ogg', 100, FALSE, -1)
 				update_icon()
 				return attack_hand(user)
+		if(!right_key)
+			to_chat(user, span_warning("Wrong key."))
+			return
+	if(istype(P, /obj/item/roguecoin/aalloy))
+		return
+	if(istype(P, /obj/item/roguecoin/inqcoin))	
+		return			
 	if(istype(P, /obj/item/roguecoin))
 		budget += P.get_real_price()
 		qdel(P)

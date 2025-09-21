@@ -63,10 +63,10 @@
 	verbage = "unties"
 
 /datum/crafting_recipe/roguetown/survival/clothsash
-	name = "fine sash (3 fibers, 1 goat fur)"
+	name = "fine sash (3 cloth, 1 silk)"
 	result = /obj/item/storage/belt/rogue/leather/sash
-	reqs = list(/obj/item/natural/fibers = 3,
-				/obj/item/natural/fur/goat = 1)
+	reqs = list(/obj/item/natural/cloth = 3,
+				/obj/item/natural/silk = 1)
 	craftdiff = 3
 
 /datum/crafting_recipe/roguetown/survival/ropebelt
@@ -86,11 +86,30 @@
 	verbage = "unties"
 
 /datum/crafting_recipe/roguetown/survival/rope
-	name = "rope"
+	name = "rope (3 fibers)"
 	result = /obj/item/rope
 	reqs = list(/obj/item/natural/fibers = 3)
 	verbage_simple = "braid"
 	verbage = "braids"
+
+/datum/crafting_recipe/roguetown/survival/rope_leash
+	name = "rope leash (1 rope)"
+	result = /obj/item/leash
+	reqs = list(/obj/item/rope = 1)
+	tools = list(/obj/item/needle)
+	verbage_simple = "sew"
+	verbage = "sews"
+	category = "General"
+	always_availible = TRUE
+
+/datum/crafting_recipe/roguetown/survival/chain_leash
+	name = "chain leash (1 chain)"
+	result = /obj/item/leash/chain
+	reqs = list(/obj/item/rope/chain = 1)
+	verbage_simple = "craft"
+	verbage = "crafts"
+	category = "General"
+	always_availible = TRUE
 
 /datum/crafting_recipe/roguetown/survival/torch
 	name = "torch"
@@ -359,7 +378,7 @@
 
 /datum/crafting_recipe/roguetown/survival/dye_brush
 	name = "dye brush"
-	result = /obj/item/needle
+	result = /obj/item/dye_brush
 	reqs = list(
 		/obj/item/grown/log/tree/stick = 2,
 		/obj/item/natural/fur = 1
@@ -390,7 +409,10 @@
 
 /datum/crafting_recipe/roguetown/survival/woodshaft
 	name = "wood shaft x2"
-	result = /obj/item/shaft/wood
+	result = list(
+		/obj/item/shaft/wood,
+		/obj/item/shaft/wood
+	)
 	tools = list(/obj/item/rogueweapon/huntingknife)
 	reqs = list(/obj/item/grown/log/tree/small = 1)
 	skillcraft = /datum/skill/craft/carpentry
@@ -407,13 +429,22 @@
 	skillcraft = /datum/skill/craft/carpentry
 	craftdiff = 2
 
+/datum/crafting_recipe/roguetown/survival/handmirror
+	name = "hand mirror"
+	result = /obj/item/handmirror
+	reqs = list(
+		/obj/item/natural/glass = 1,
+		/obj/item/grown/log/tree/stick = 1,
+		)
+	craftdiff = 2
+
 // Improvised surgey tools. They go here for now (TM)
 /datum/crafting_recipe/roguetown/survival/improvisedsaw
 	name = "improvised surgery saw (1 fiber + 1 stone + 1 stick)"
 	result = /obj/item/rogueweapon/surgery/saw/improv
 	reqs = list(
-		/obj/item/natural/fibers = 1, 
-		/obj/item/natural/stone = 1, 
+		/obj/item/natural/fibers = 1,
+		/obj/item/natural/stone = 1,
 		/obj/item/grown/log/tree/stick = 1,
 		)
 	craftdiff = 1
@@ -440,7 +471,7 @@
 // I don't want ration paper to be too expensive, making wrapped food underused
 // So instead, ration paper is a very cheap recipe with parchment and tallow (instead of full fat) that makes 2 wrapper
 // However, it is heavily skillgated by cooking skill. At Craftdiff 4, only Innkeep / Cook can make it easily off the bat.
-// Servant w/ high int can also make it, but it is a bit harder. Or just be middle aged / old instead lol 
+// Servant w/ high int can also make it, but it is a bit harder. Or just be middle aged / old instead lol
 // For 1 fat, 1 log (48 reagents), you get 4 tallow + 6 piece of paper yielding 12 ration wrappers with 1 tallow leftover.
 /datum/crafting_recipe/roguetown/survival/ration_wrapper
 	name = "ration wrapping paper (x2)"
@@ -454,3 +485,16 @@
 		)
 	skillcraft = /datum/skill/craft/cooking
 	craftdiff = 4
+
+
+/datum/crafting_recipe/roguetown/survival/cheele
+	name = "cheele (1x)"
+	result = list(
+		/obj/item/natural/worms/leech/cheele
+		)
+	reqs = list(
+		/obj/item/reagent_containers/lux = 1,
+		/obj/item/natural/worms/leech = 1,
+		)
+	skillcraft = /datum/skill/misc/medicine
+	craftdiff = SKILL_LEVEL_EXPERT

@@ -1,5 +1,5 @@
 /datum/antagonist/werewolf
-	name = "Verewolf"
+	name = "Verevolf"
 	roundend_category = "Werewolves"
 	antagpanel_category = "Werewolf"
 	job_rank = ROLE_WEREWOLF
@@ -14,13 +14,10 @@
 	var/transformed
 	var/transforming
 	var/untransforming
-	var/wwgenitals
-	var/wwbreastsize = 3
-	var/wolfname = "Verewolf"
-	var/wretch_antag = FALSE
+	var/wolfname = "Verevolf"
 
 /datum/antagonist/werewolf/lesser
-	name = "Lesser Verewolf"
+	name = "Lesser Verevolf"
 	increase_votepwr = FALSE
 
 /datum/antagonist/werewolf/lesser/roundend_report()
@@ -86,6 +83,8 @@
 		return FALSE
 	if(HAS_TRAIT(src, TRAIT_SILVER_BLESSED))
 		return FALSE
+	if(HAS_TRAIT(src, TRAIT_HOLLOW_LIFE))
+		return FALSE
 	return TRUE
 
 /mob/living/carbon/human/proc/werewolf_check(werewolf_type = /datum/antagonist/werewolf/lesser)
@@ -131,7 +130,7 @@
 
 /obj/item/clothing/suit/roguetown/armor/skin_armor/werewolf_skin
 	slot_flags = null
-	name = "verewolf's skin"
+	name = "verevolf's skin"
 	desc = ""
 	icon_state = null
 	body_parts_covered = FULL_BODY
@@ -170,7 +169,6 @@
 	force = 25
 	block_chance = 0
 	wdefense = 2
-	blade_dulling = DULLING_SHAFT_GRAND
 	armor_penetration = 15
 	associated_skill = /datum/skill/combat/unarmed
 	wlength = WLENGTH_NORMAL

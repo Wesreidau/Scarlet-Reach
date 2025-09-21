@@ -59,6 +59,9 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 	var/brotherhoodtext = "Stand proud, for the Brotherhood!!"
 	var/chargetext = "Chaaaaaarge!!"
 
+	var/mob/living/carbon/champion = null
+	var/mob/living/carbon/ward = null
+
 	var/linglink
 	var/datum/martial_art/martial_art
 	var/static/default_martial_art = new/datum/martial_art
@@ -160,7 +163,8 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 			else
 				referred_gender = "Androgynous"
 		known_people[H.real_name]["FGENDER"] = referred_gender
-		known_people[H.real_name]["FSPECIES"] = H.dna.species.name
+		if(H.dna && H.dna.species)
+			known_people[H.real_name]["FSPECIES"] = H.dna.species.name
 		known_people[H.real_name]["FAGE"] = H.age
 		if (ishuman(current))
 			var/mob/living/carbon/human/C = current
@@ -315,6 +319,8 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 // adjusts the amount of available spellpoints
 /datum/mind/proc/adjust_spellpoints(points)
 	spell_points += points
+	if(!has_spell(/obj/effect/proc_holder/spell/targeted/touch/prestidigitation))
+		AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
 	check_learnspell() //check if we need to add or remove the learning spell
 
 /datum/mind/proc/set_death_time()
@@ -736,6 +742,12 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 /datum/mind/proc/RemoveAllSpells()
 	for(var/obj/effect/proc_holder/S in spell_list)
 		RemoveSpell(S)
+
+//removes spells that have miracle = true on them
+/datum/mind/proc/RemoveAllMiracles()
+	for(var/obj/effect/proc_holder/spell/spell in spell_list)
+		if(spell.miracle)
+			RemoveSpell(spell)
 
 /datum/mind/proc/transfer_martial_arts(mob/living/new_character)
 	if(!ishuman(new_character))

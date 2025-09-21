@@ -35,7 +35,7 @@
 		OFFSET_ID = list(0,1), OFFSET_GLOVES = list(0,1), OFFSET_WRISTS = list(0,1),\
 		OFFSET_CLOAK = list(0,1), OFFSET_FACEMASK = list(0,1), OFFSET_HEAD = list(0,1), \
 		OFFSET_FACE = list(0,1), OFFSET_BELT = list(0,1), OFFSET_BACK = list(0,1), \
-		OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,1), \
+		OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,0), \
 		OFFSET_SHIRT = list(0,1), OFFSET_ARMOR = list(0,1), OFFSET_HANDS = list(0,1), OFFSET_UNDIES = list(0,1), \
 		OFFSET_ID_F = list(0,-1), OFFSET_GLOVES_F = list(0,0), OFFSET_WRISTS_F = list(0,0), OFFSET_HANDS_F = list(0,0), \
 		OFFSET_CLOAK_F = list(0,0), OFFSET_FACEMASK_F = list(0,-1), OFFSET_HEAD_F = list(0,-1), \
@@ -52,6 +52,7 @@
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
 		/datum/customizer/bodypart_feature/underwear,
+		/datum/customizer/bodypart_feature/legwear,
 		/datum/customizer/organ/testicles/anthro,
 		/datum/customizer/organ/penis/anthro,
 		/datum/customizer/organ/breasts/human,
@@ -102,6 +103,21 @@
 		"Olympia" = SKIN_COLOR_OLYMPIA,
 		"Necral" = SKIN_COLOR_NECRAL,
 		"Abyssal" = SKIN_COLOR_ABYSSAL,
+	)
+
+/datum/species/aasimar/get_skin_list_tooltip()
+	return list(
+		"Cultor <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_CULTOR];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_CULTOR,
+		"Spiritus <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SPIRITUS];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SPIRITUS,
+		"Planetar <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_PLANETAR];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_PLANETAR,
+		"Deva <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_DEVA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_DEVA,
+		"Solar <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SOLAR];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SOLAR,
+		"Empyrea <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_EMPYREA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_EMPYREA,
+		"Gaeia <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_GAEIA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_GAEIA,
+		"Celestial <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_CELESTIAL];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_CELESTIAL,
+		"Olympia <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_OLYMPIA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_OLYMPIA,
+		"Necral <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_NECRAL];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_NECRAL,
+		"Abyssal <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_ABYSSAL];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_ABYSSAL,
 	)
 
 /datum/species/aasimar/get_hairc_list()

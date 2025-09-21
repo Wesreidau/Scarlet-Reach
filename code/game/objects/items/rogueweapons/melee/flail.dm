@@ -15,7 +15,6 @@
 	smeltresult = /obj/item/ingot/iron
 	parrysound = list('sound/combat/parry/parrygen.ogg')
 	swingsound = BLUNTWOOSH_MED
-	blade_dulling = DULLING_SHAFT_WOOD
 	throwforce = 5
 	wdefense = 0
 	minstr = 4
@@ -77,7 +76,7 @@
 
 /datum/intent/flail/strike/smashrange
 	name = "ranged smash"
-	chargetime = 10
+	chargetime = 1 SECONDS
 	chargedrain = 2
 	no_early_release = TRUE
 	recovery = 30
@@ -109,7 +108,6 @@
 	force = 22
 	max_integrity = 175
 	smeltresult = /obj/item/ingot/aalloy
-	blade_dulling = DULLING_SHAFT_CONJURED
 
 /obj/item/rogueweapon/flail/sflail/paflail
 	name = "ancient flail"
@@ -130,13 +128,21 @@
 	icon_state = "necraflail"
 
 /obj/item/rogueweapon/flail/sflail/psyflail
-	name = "psydonian flail"
+	name = "ornate flail"
 	desc = "An ornate flail, plated in a ceremonial veneer of silver. Its flanged head can crumple even the toughest of darksteel-maille."
 	icon_state = "psyflail"
 
 /obj/item/rogueweapon/flail/sflail/psyflail/ComponentInitialize()
 	. = ..()							//+3 force, +50 int, +1 def, make silver
 	AddComponent(/datum/component/psyblessed, FALSE, 3, FALSE, 50, 1, TRUE)
+
+/obj/item/rogueweapon/flail/sflail/psyflail/relic
+	name = "Consecratia"
+	desc = "The weight of His anguish, His pain, His hope and His love for humenkind - all hanging on the ornamental silver-steel head chained to this arm. <br><br>A declaration of love for all that Psydon lives for, and a crushing reminder to the arch-nemesis that they will not triumph as long as He endures."
+	icon_state = "psymorningstar"
+
+/obj/item/rogueweapon/flail/sflail/psyflail/relic/ComponentInitialize()		//Pre-blessed, +100 Blade int, +100 int, +2 def, make it silver
+	AddComponent(/datum/component/psyblessed, TRUE, 5, 100, 100, 2, TRUE)
 
 /obj/item/rogueweapon/flail/peasantwarflail
 	force = 10
@@ -162,7 +168,6 @@
 	associated_skill = /datum/skill/combat/polearms
 	anvilrepair = /datum/skill/craft/carpentry
 	dropshrink = 0.9
-	blade_dulling = DULLING_SHAFT_WOOD
 	wdefense = 4
 	resistance_flags = FLAMMABLE
 
@@ -185,7 +190,7 @@
 	gripped_intents = list(/datum/intent/flail/strike/matthiosflail, /datum/intent/flail/strike/smash/matthiosflail)
 	associated_skill = /datum/skill/combat/whipsflails
 	slot_flags = ITEM_SLOT_BACK
-	blade_dulling = DULLING_SHAFT_GRAND
+	anvilrepair = /datum/skill/craft/weaponsmithing
 
 
 /obj/item/rogueweapon/flail/peasantwarflail/matthios/pickup(mob/living/user)

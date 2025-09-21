@@ -33,7 +33,9 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			client.prefs?.save_character()
 		if(is_legacy)
 			dat += "<center><i><font color = '#b9b9b9'; font size = 1>This is a LEGACY Profile from naive days of Psydon.</font></i></center>"
-		if(valid_headshot_link(null, headshot_link, TRUE))
+		var/agevetted = client.check_agevet()
+		dat += "<br><center>This person is [agevetted ? "<font color='#1cb308'>Age Vetted.</font>" : "<font color='#aa0202'>Not Age Vetted</font>"]</center>"
+		if(valid_headshot_link(null, headshot_link, TRUE) && agevetted)
 			dat += ("<div align='center'><img src='[headshot_link]' width='350px' height='350px'></div>")
 		if(flavortext)
 			dat += "<div align='left'>[flavortext_display]</div>"
@@ -41,14 +43,15 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			dat += "<br>"
 			dat += "<div align='center'><b>OOC notes</b></div>"
 			dat += "<div align='left'>[ooc_notes_display]</div>"
-		if(ooc_extra)
+		if(ooc_extra && agevetted)
 			dat += "[ooc_extra]"
-		if(nsfw_headshot_link)
-			dat += "<br><div align='center'><b>NSFW</b></div>"
-		if(nsfw_headshot_link && !wear_armor && !wear_shirt)
-			dat += ("<br><div align='center'><img src='[nsfw_headshot_link]' width='600px' height='725px'></div>")
-		else if(nsfw_headshot_link && (wear_armor || wear_shirt))
-			dat += "<br><center><i><font color = '#9d0080'; font size = 5>There is more to see but they are not naked...</font></i></center>"
+		if(agevetted)
+			if(nsfw_headshot_link)
+				dat += "<br><div align='center'><b>NSFW</b></div>"
+			if(nsfw_headshot_link && !(wear_armor && wear_armor.flags_inv) && !(wear_shirt && wear_shirt.flags_inv))
+				dat += ("<br><div align='center'><img src='[nsfw_headshot_link]' width='600px'></div>")
+			else if(nsfw_headshot_link && (wear_armor || wear_shirt))
+				dat += "<br><center><i><font color = '#9d0080'; font size = 5>There is more to see but they are not naked...</font></i></center>"
 		var/datum/browser/popup = new(user, "[src]", nwidth = 700, nheight = 800)
 		popup.set_content(dat.Join())
 		popup.open(FALSE)
@@ -138,6 +141,22 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 				var/mob/living/carbon/C = usr
 				C.put_in_hands(underwear)
 			underwear = null
+
+	if(href_list["legwearsthing"]) //canUseTopic check for this is handled by mob/Topic()
+		if(!get_location_accessible(src, BODY_ZONE_PRECISE_GROIN, skipundies = TRUE))
+			to_chat(usr, span_warning("I can't reach that! Something is covering it."))
+			return
+		if(!legwear_socks)
+			return
+		usr.visible_message(span_warning("[usr] starts taking off [src]'s [legwear_socks.name]."),span_warning("I start taking off [src]'s [legwear_socks.name]..."))
+		if(do_after(usr, 50, needhand = 1, target = src))
+			var/obj/item/bodypart/chest = get_bodypart(BODY_ZONE_CHEST)
+			chest.remove_bodypart_feature(legwear_socks.legwears_feature)
+			legwear_socks.forceMove(get_turf(src))
+			if(iscarbon(usr))
+				var/mob/living/carbon/C = usr
+				C.put_in_hands(legwear_socks)
+			legwear_socks = null
 
 	if(href_list["pockets"] && usr.canUseTopic(src, BE_CLOSE, NO_DEXTERITY)) //TODO: Make it match (or intergrate it into) strippanel so you get 'item cannot fit here' warnings if mob_can_equip fails
 		var/pocket_side = href_list["pockets"]

@@ -93,12 +93,74 @@
 	allow_quick_empty = TRUE
 	insert_preposition = "in"
 
+/datum/component/storage/concrete/roguetown/sack/New(datum/P, ...)
+	. = ..()
+	cant_hold = typecacheof(list(/obj/item/restraints/legcuffs/beartrap))
+
 /datum/component/storage/concrete/roguetown/sack/bag
 	dump_time = 10
 	not_while_equipped = TRUE
 	click_gather = FALSE
 	allow_quick_gather = FALSE
 	allow_quick_empty = FALSE
+
+/datum/component/storage/concrete/grid/meatsack // our rucksack is different from
+// Vanderlin so we use a separate one for meatsack
+	max_w_class = WEIGHT_CLASS_NORMAL
+	screen_max_rows = 5
+	screen_max_columns = 4
+	click_gather = TRUE
+	collection_mode = COLLECT_EVERYTHING
+	dump_time = 0
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	allow_dump_out = TRUE
+	insert_preposition = "in"
+
+/datum/component/storage/concrete/grid/meatsack/New(datum/P, ...)
+	. = ..()
+	set_holdable(list(
+		/obj/item/reagent_containers/food/snacks/rogue/meat,
+		/obj/item/reagent_containers/food/snacks/fat,
+		/obj/item/natural/fur,
+		/obj/item/natural/hide,
+		/obj/item/alch/sinew,
+		/obj/item/alch/viscera,
+		/obj/item/alch/bone
+		))
+
+/datum/component/storage/concrete/grid/magebag
+	max_w_class = WEIGHT_CLASS_NORMAL
+	click_gather = TRUE
+	collection_mode = COLLECT_EVERYTHING
+	dump_time = 0
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	allow_dump_out = TRUE
+	screen_max_rows = 8
+	screen_max_columns = 5
+
+/datum/component/storage/concrete/grid/magebag/New(datum/P, ...)
+	. = ..()
+	set_holdable(list(
+		/obj/item/magic/infernal/ash,
+		/obj/item/magic/infernal/fang,
+		/obj/item/magic/infernal/core,
+		/obj/item/magic/infernal/flame,
+		/obj/item/magic/fae/dust,
+		/obj/item/magic/fae/scale,
+		/obj/item/magic/fae/core,
+		/obj/item/magic/fae/essence,
+		/obj/item/magic/elemental/mote,
+		/obj/item/magic/elemental/shard,
+		/obj/item/magic/elemental/fragment,
+		/obj/item/magic/elemental/relic,
+		/obj/item/magic/obsidian,
+		/obj/item/magic/leyline,
+		/obj/item/reagent_containers/food/snacks/grown/manabloom,
+		/obj/item/magic/manacrystal,
+		/obj/item/ash,
+		))
 
 /datum/component/storage/concrete/roguetown/saddle
 	screen_max_rows = 4
@@ -131,3 +193,4 @@
 /datum/component/storage/concrete/grid/headhook/bronze
 	screen_max_rows = 8
 	screen_max_columns = 6
+

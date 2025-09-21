@@ -37,7 +37,7 @@
 		OFFSET_ID = list(0,1), OFFSET_GLOVES = list(0,1), OFFSET_WRISTS = list(0,1),\
 		OFFSET_CLOAK = list(0,1), OFFSET_FACEMASK = list(0,1), OFFSET_HEAD = list(0,1), \
 		OFFSET_FACE = list(0,1), OFFSET_BELT = list(0,1), OFFSET_BACK = list(0,1), \
-		OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,1), \
+		OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,0), \
 		OFFSET_SHIRT = list(0,1), OFFSET_ARMOR = list(0,1), OFFSET_HANDS = list(0,1), OFFSET_UNDIES = list(0,1), \
 		OFFSET_ID_F = list(0,-1), OFFSET_GLOVES_F = list(0,0), OFFSET_WRISTS_F = list(0,0), OFFSET_HANDS_F = list(0,0), \
 		OFFSET_CLOAK_F = list(0,0), OFFSET_FACEMASK_F = list(0,-1), OFFSET_HEAD_F = list(0,-1), \
@@ -52,7 +52,7 @@
 		ORGAN_SLOT_HEART = /obj/item/organ/heart,
 		ORGAN_SLOT_LUNGS = /obj/item/organ/lungs,
 		ORGAN_SLOT_EYES = /obj/item/organ/eyes/halfelf,
-		ORGAN_SLOT_EARS = /obj/item/organ/ears/elf,
+		ORGAN_SLOT_EARS = /obj/item/organ/ears,
 		ORGAN_SLOT_TONGUE = /obj/item/organ/tongue,
 		ORGAN_SLOT_LIVER = /obj/item/organ/liver,
 		ORGAN_SLOT_STOMACH = /obj/item/organ/stomach,
@@ -65,10 +65,12 @@
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
 		/datum/customizer/bodypart_feature/underwear,
+		/datum/customizer/bodypart_feature/legwear,
 		/datum/customizer/organ/testicles/anthro,
 		/datum/customizer/organ/penis/anthro,
 		/datum/customizer/organ/breasts/human,
 		/datum/customizer/organ/vagina/human_anthro,
+		/datum/customizer/organ/ears/elf,
 		)
 	body_marking_sets = list(
 		/datum/body_marking_set/none,
@@ -96,16 +98,16 @@
 /datum/species/human/halfelf/get_skin_list()
 	return list(
 		"Timber-Gronn" = SKIN_COLOR_TIMBER_GRONN,
-		"Giza-Azure" = SKIN_COLOR_GIZA_AZURE,
+		"Giza-Scarlet" = SKIN_COLOR_GIZA_SCARLET,
 		"Walnut-Stine" = SKIN_COLOR_WALNUT_STINE,
-		"Etrustcan-Dandelion" = SKIN_COLOR_ETRUSTCAN_DANDELION,
+		"Etruscan-Dandelion" = SKIN_COLOR_ETRUSCAN_DANDELION,
 		"Ebon-Born" = SKIN_COLOR_EBON_BORN,
 		"Kaze-Lotus" = SKIN_COLOR_KAZE_LOTUS,
-		"Grenzel-Azuria" = SKIN_COLOR_GRENZEL_WOODS,
+		"Grenzel-Scarlet" = SKIN_COLOR_GRENZEL_WOODS,
 		"Etrusca-Lirvas" = SKIN_COLOR_ETRUSCA_LIRVAS,
 		"Free Roamers" = SKIN_COLOR_FREE_FOLK,
-		"Avar Borne"	= SKIN_COLOR_AVAR_BORNE,
-		"Shalvine Roamer" = SKIN_COLOR_SHALVINE_AZURE,
+		"Avar Borne" = SKIN_COLOR_AVAR_BORNE,
+		"Shalvine Roamer" = SKIN_COLOR_SHALVINE_SCARLET,
 		"Lalve-Steppes" = SKIN_COLOR_LALVE_NALEDI,
 		"Ebon-Otava" = SKIN_COLOR_EBON_OTAVA,
 		"Grezel-Avar" = SKIN_COLOR_GRENZEL_AVAR,
@@ -116,7 +118,39 @@
 		"Sshanntynlan-kin" = SKIN_COLOR_SSHANNTYNLAN,
 		"Llurth Dreir-kin" = SKIN_COLOR_LLURTH_DREIR,
 		"Tafravma-kin" = SKIN_COLOR_TAFRAVMA,
-		"Yuethindrynn-kin" = SKIN_COLOR_YUETHINDRYNN
+		"Yuethindrynn-kin" = SKIN_COLOR_YUETHINDRYNN,
+		"Koredynn-kin" = SKIN_COLOR_KOREDYNN,
+		"Aiseedrynn-kin" = SKIN_COLOR_AISEEDRYNN,
+		"Grenduskra-kin" = SKIN_COLOR_GRENDUSKRA
+	)
+
+/datum/species/human/halfelf/get_skin_list_tooltip()
+	return list(
+		"Timber-Gronn <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_TIMBER_GRONN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_TIMBER_GRONN,
+		"Giza-Scarlet <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_GIZA_SCARLET];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_GIZA_SCARLET,
+		"Walnut-Stine <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_WALNUT_STINE];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_WALNUT_STINE,
+		"Etruscan-Dandelion <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_ETRUSCAN_DANDELION];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_ETRUSCAN_DANDELION,
+		"Ebon-Born <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_EBON_BORN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_EBON_BORN,
+		"Kaze-Lotus <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_KAZE_LOTUS];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_KAZE_LOTUS,
+		"Grenzel-Scarlet <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_GRENZEL_WOODS];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_GRENZEL_WOODS,
+		"Etrusca-Lirvas <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_ETRUSCA_LIRVAS];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_ETRUSCA_LIRVAS,
+		"Free Roamers <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_FREE_FOLK];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_FREE_FOLK,
+		"Avar Borne <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_AVAR_BORNE];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_AVAR_BORNE,
+		"Shalvine Roamer <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SHALVINE_SCARLET];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SHALVINE_SCARLET,
+		"Lalve-Steppes <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_LALVE_NALEDI];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_LALVE_NALEDI,
+		"Ebon-Otava <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_EBON_OTAVA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_EBON_OTAVA,
+		"Grezel-Avar <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_GRENZEL_AVAR];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_GRENZEL_AVAR,
+		"Hammer-Gronn <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_HAMMER_GRONN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_HAMMER_GRONN,
+		"Commorah-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_COMMORAH];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_COMMORAH,
+		"Gloomhaven-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_GLOOMHAVEN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_GLOOMHAVEN,
+		"Darkpila-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_DARKPILA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_DARKPILA,
+		"Sshanntynlan-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SSHANNTYNLAN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SSHANNTYNLAN,
+		"Llurth Dreir-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_LLURTH_DREIR];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_LLURTH_DREIR,
+		"Tafravma-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_TAFRAVMA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_TAFRAVMA,
+		"Yuethindrynn-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_YUETHINDRYNN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_YUETHINDRYNN,
+		"Koredynn-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_KOREDYNN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_KOREDYNN,
+		"Aiseedrynn-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_AISEEDRYNN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_AISEEDRYNN,
+		"Grenduskra-kin <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_GRENDUSKRA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_GRENDUSKRA
 	)
 
 /datum/species/human/halfelf/proc/languages(mob/living/carbon/human/literally_him)

@@ -28,6 +28,9 @@
 		for(var/X in GLOB.mercenary_positions)
 			peopleiknow += X
 			peopleknowme += X
+		for(var/X in GLOB.inquisition_positions)
+			peopleiknow += X
+			peopleknowme += X	
 
 /datum/outfit/job/roguetown
 	uniform = null
@@ -74,7 +77,7 @@
 			if(H.dna.species)
 				if(H.dna.species.name in list("Elf", "Half-Elf"))
 					H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-				if(H.dna.species.name in list("Metal Construct"))
+				if(H.dna.species.name in list("Golem"))
 					H.adjust_skillrank(/datum/skill/craft/engineering, 2, TRUE)
 	H.update_body()
 

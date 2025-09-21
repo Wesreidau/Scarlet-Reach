@@ -69,19 +69,29 @@
 	if(istype(user.rmb_intent, /datum/rmb_intent/swift))
 		adf = max(round(adf * CLICK_CD_MOD_SWIFT), CLICK_CD_INTENTCAP)
 	user.changeNext_move(adf)
+	for(var/obj/item/clothing/worn_thing in get_equipped_items(include_pockets = TRUE))//checks clothing worn by src.
+	// Things that are supposed to be worn, being held = cannot block
+		if(isclothing(worn_thing))
+			if(worn_thing in held_items)
+				continue
+		// Things that are supposed to be held, being worn = cannot block
+		else if(!(worn_thing in held_items))
+			continue
+		worn_thing.hit_response(src, user) //checks if clothing has hit response. Refer to Items.dm
 	return I.attack(src, user)
 
 /mob/living
 	var/tempatarget = null
 	var/pegleg = 0			//Handles check & slowdown for peglegs. Fuckin' bootleg, literally, but hey it at least works.
 	var/construct = 0
+	var/dual_attack_active = 0 // we're rerunning the attack proc again for a successful dual wield attack
 
 /obj/item/proc/attack(mob/living/M, mob/living/user)
 	if(SEND_SIGNAL(src, COMSIG_ITEM_ATTACK, M, user) & COMPONENT_ITEM_NO_ATTACK)
 		return FALSE
 	SEND_SIGNAL(user, COMSIG_MOB_ITEM_ATTACK, M, user)
 	if(item_flags & NOBLUDGEON)
-		return FALSE	
+		return FALSE
 
 	if(force && HAS_TRAIT(user, TRAIT_PACIFISM))
 		to_chat(user, span_warning("I don't want to harm other living beings!"))
@@ -93,7 +103,7 @@
 		M.mind.attackedme[user.real_name] = world.time
 	if(force)
 		if(user.used_intent)
-			if(!user.used_intent.noaa)
+			if(!user.used_intent.noaa && !user.dual_attack_active)
 				playsound(get_turf(src), pick(swingsound), 100, FALSE, -1)
 			if(user.used_intent.no_attack) //BYE!!!
 				return
@@ -140,7 +150,7 @@
 	if(M.has_status_effect(/datum/status_effect/buff/clash) && M.get_active_held_item() && ishuman(M) && !bad_guard)
 		var/mob/living/carbon/human/HM = M
 		var/obj/item/IM = M.get_active_held_item()
-		var/obj/item/IU 
+		var/obj/item/IU
 		if(user.used_intent.masteritem)
 			IU = user.used_intent.masteritem
 		HM.process_clash(user, IM, IU)
@@ -189,7 +199,11 @@
 							span_boldwarning("I'm disarmed by [user]!"))
 			return
 
+	var/do_double_hit = FALSE
 	if(M.attacked_by(src, user))
+		switch(user.used_intent.blade_class)
+			if(BCLASS_BLUNT,BCLASS_CUT,BCLASS_CHOP,BCLASS_STAB,BCLASS_PICK,BCLASS_PIERCE) // only these intents are allowed to double attack with dual wield trait
+				do_double_hit = get_dist(get_turf(user), get_turf(M)) <= 1 // do not allow this for whips and other long range weapons
 		if(user.used_intent == cached_intent)
 			var/tempsound = user.used_intent.hitsound
 			if(tempsound)
@@ -200,6 +214,34 @@
 	log_combat(user, M, "attacked", src.name, "(INTENT: [uppertext(user.used_intent.name)]) (DAMTYPE: [uppertext(damtype)])")
 	add_fingerprint(user)
 
+	if(user.dual_attack_active) // sir, a second attack has hit the mob
+		if(user.client?.prefs.showrolls && do_double_hit)
+			to_chat(user, span_notice("Success!"))
+		return
+	if(do_double_hit && HAS_TRAIT(user, TRAIT_DUALWIELDER)) // do a second follow up attack if we successfully hit our target
+		if(!prob(33)) // 33% chance of doing a second hit
+			return
+		var/obj/item/offh = user.get_inactive_held_item()
+		if(!offh)
+			return
+		var/obj/item/mainh = user.get_active_held_item()
+		if(!mainh || !istype(mainh, offh))
+			return
+		if(!iscarbon(user) || user == M) // don't allow this to apply to yourself
+			return
+		var/bakstr = user.STASTR
+		var/bakhandindex = user.active_hand_index
+		user.STASTR = round(user.STASTR*0.5)+1 // half str for second attack
+		user.active_hand_index = (user.active_hand_index % user.held_items.len)+1
+		if(user.client?.prefs.showrolls)
+			to_chat(user, span_info("I try getting in a second attack!"))
+		user.dual_attack_active = 1
+		offh.attack(M, user)
+		if(!user.used_intent.noaa)
+			user.do_attack_animation(get_turf(M), user.used_intent.animname, offh, used_intent = user.used_intent)
+		user.dual_attack_active = 0
+		user.STASTR = bakstr
+		user.active_hand_index = bakhandindex
 
 //the equivalent of the standard version of attack() but for object targets.
 /obj/item/proc/attack_obj(obj/O, mob/living/user)
@@ -229,6 +271,9 @@
 	testing("startforce [newforce]")
 	if(!istype(user))
 		return newforce
+	var/dullness_ratio
+	if(I.max_blade_int && I.sharpness != IS_BLUNT)
+		dullness_ratio = I.blade_int / I.max_blade_int
 	var/cont = FALSE
 	var/used_str = user.STASTR
 	if(iscarbon(user))
@@ -247,6 +292,12 @@
 			strmod += strcappedmod
 		else
 			strmod = ((used_str - 10) * STRENGTH_MULT)
+		if(dullness_ratio)
+			if(dullness_ratio <= SHARPNESS_TIER2_THRESHOLD)
+				strmod = 0
+			else if(dullness_ratio < SHARPNESS_TIER1_THRESHOLD)
+				var/strlerp = (dullness_ratio - SHARPNESS_TIER2_THRESHOLD) / (SHARPNESS_TIER1_THRESHOLD - SHARPNESS_TIER2_THRESHOLD)
+				strmod *= strlerp
 		newforce = newforce + (newforce * strmod)
 	else if(used_str <= 9)
 		newforce = newforce - (newforce * ((10 - used_str) * 0.1))
@@ -416,6 +467,13 @@
 				if(BCLASS_PICK)
 					dullfactor = 0.5
 	var/newdam = (I.force_dynamic * user.used_intent.damfactor) - I.force_dynamic
+	if(user.used_intent.damfactor > 1)	//Only relevant if damfactor actually adds damage.
+		if(dullness_ratio <= SHARPNESS_TIER2_THRESHOLD)
+			newdam = 0
+		else if(dullness_ratio <= SHARPNESS_TIER1_THRESHOLD)
+			var/damflerp = (dullness_ratio - SHARPNESS_TIER2_THRESHOLD) / (SHARPNESS_TIER1_THRESHOLD - SHARPNESS_TIER2_THRESHOLD)
+			newdam *= damflerp
+			newdam = round(newdam)	//floors it, making the scaling harsher
 	newforce = (newforce + newdam) * dullfactor
 	if(user.used_intent.get_chargetime() && user.client?.chargedprog < 100)
 		newforce = newforce * 0.5
@@ -423,6 +481,12 @@
 		newforce *= 0.5
 	newforce = round(newforce,1)
 	newforce = max(newforce, 1)
+	if(dullness_ratio)
+		if(dullness_ratio < SHARPNESS_TIER2_THRESHOLD)
+			var/lerpratio = LERP(0, SHARPNESS_TIER2_THRESHOLD, (dullness_ratio / SHARPNESS_TIER2_THRESHOLD))	//Yes, it's meant to LERP between 0 and 0.x using ratio / tier2. The damage falls off a cliff. Intended!
+			if(prob(33))
+				to_chat(user, span_info("The blade is dull..."))
+			newforce *= (lerpratio * 2)
 	testing("endforce [newforce]")
 	return newforce
 
@@ -478,7 +542,7 @@
 
 	if(multiplier)
 		newforce = newforce * multiplier
-	
+
 	take_damage(newforce, I.damtype, I.d_type, 1)
 	if(newforce > 1)
 		I.take_damage(1, BRUTE, I.d_type)
@@ -539,7 +603,7 @@
 			return
 
 		if(ishuman(target) && target.mind)
-			var/mob/living/carbon/human/s_user = user
+//			var/mob/living/carbon/human/s_user = user //commented out because it's unused as long as vlord is always vulnerable to silver
 			var/mob/living/carbon/human/H = target
 			var/datum/antagonist/werewolf/W = H.mind.has_antag_datum(/datum/antagonist/werewolf/)
 			var/datum/antagonist/vampirelord/lesser/V = H.mind.has_antag_datum(/datum/antagonist/vampirelord/lesser)
@@ -556,18 +620,23 @@
 					H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
 					src.last_used = world.time
 			if(V_lord)
-				if(V_lord.vamplevel < 4 && !V)
+				if(!V)
 					H.visible_message("<font color='white'>The silver weapon weakens the curse temporarily!</font>")
 					to_chat(H, span_userdanger("I'm hit by my BANE!"))
 					H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
 					src.last_used = world.time
-				if(V_lord.vamplevel == 4 && !V)
+				/*if(V_lord.vamplevel == 4 && !V)
 					to_chat(s_user, "<font color='red'> The silver weapon fails!</font>")
-					H.visible_message(H, span_userdanger("This feeble metal can't hurt me, I AM ANCIENT!"))
+					H.visible_message(H, span_userdanger("This feeble metal can't hurt me, I AM ANCIENT!"))*/
 			if(W && W.transformed == TRUE)
 				H.visible_message("<font color='white'>The silver weapon weakens the curse temporarily!</font>")
 				to_chat(H, span_userdanger("I'm hit by my BANE!"))
 				H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
+				src.last_used = world.time
+			if(HAS_TRAIT(H, TRAIT_HOLLOW_LIFE))
+				H.visible_message("<font color='white'>The silver weapon weakens the damned temporarily!</font>")
+				to_chat(H, span_userdanger("I'm hit by my BANE!"))
+				H.apply_status_effect(/datum/status_effect/debuff/silver_curse_weaker)
 				src.last_used = world.time
 	return
 
@@ -659,7 +728,7 @@
 		return
 	var/message_hit_area = ""
 	if(hit_area)
-		message_hit_area = " in the [hit_area]"
+		message_hit_area = " in the [span_userdanger(hit_area)]"
 	var/attack_message = "[src] is [message_verb][message_hit_area] with [I]!"
 	var/attack_message_local = "I'm [message_verb][message_hit_area] with [I]!"
 	if(user in viewers(src, null))

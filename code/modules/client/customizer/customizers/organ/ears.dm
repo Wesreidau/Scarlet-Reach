@@ -17,7 +17,17 @@
 	sprite_accessories = list(
 		/datum/sprite_accessory/ears/fox,
 		/datum/sprite_accessory/ears/vulp,
-		/datum/sprite_accessory/ears/big/sandfox_large
+		/datum/sprite_accessory/ears/broad,
+		/datum/sprite_accessory/ears/big/sandfox_large,
+		/datum/sprite_accessory/ears/bigwolf,
+		/datum/sprite_accessory/ears/bigwolf_inner,
+		/datum/sprite_accessory/ears/husky,
+		/datum/sprite_accessory/ears/otie,
+		/datum/sprite_accessory/ears/wolf,
+		/datum/sprite_accessory/ears/lab,
+		/datum/sprite_accessory/ears/cat_big,
+		/datum/sprite_accessory/ears/cat_normal,
+		/datum/sprite_accessory/ears/miqote,
 		)
 
 /datum/customizer/organ/ears/lupian
@@ -125,6 +135,7 @@
 		/datum/sprite_accessory/ears/rabbit,
 		/datum/sprite_accessory/ears/bunny,
 		/datum/sprite_accessory/ears/bunny_perky,
+		/datum/sprite_accessory/ears/bunny_long,
 		/datum/sprite_accessory/ears/big/rabbit_large,
 		/datum/sprite_accessory/ears/cat_big,
 		/datum/sprite_accessory/ears/cat_normal,
@@ -138,6 +149,7 @@
 		/datum/sprite_accessory/ears/fish,
 		/datum/sprite_accessory/ears/fox,
 		/datum/sprite_accessory/ears/vulp,
+		/datum/sprite_accessory/ears/broad,
 		/datum/sprite_accessory/ears/husky,
 		/datum/sprite_accessory/ears/jellyfish,
 		/datum/sprite_accessory/ears/kangaroo,
@@ -161,6 +173,9 @@
 		/datum/sprite_accessory/ears/big/acrador_short,
 		/datum/sprite_accessory/ears/big/sandfox_large,
 		/datum/sprite_accessory/ears/lynx,
+		/datum/sprite_accessory/ears/dendorite,
+		/datum/sprite_accessory/ears/eoran,
+		/datum/sprite_accessory/ears/pestran,
 		)
 
 /datum/customizer/organ/ears/anthro
@@ -183,6 +198,7 @@
 		/datum/sprite_accessory/ears/bunny,
 		/datum/sprite_accessory/ears/big/rabbit_large,
 		/datum/sprite_accessory/ears/bunny_perky,
+		/datum/sprite_accessory/ears/bunny_long,
 		/datum/sprite_accessory/ears/cat_big,
 		/datum/sprite_accessory/ears/cat_normal,
 		/datum/sprite_accessory/ears/cow,
@@ -195,6 +211,7 @@
 		/datum/sprite_accessory/ears/fish,
 		/datum/sprite_accessory/ears/fox,
 		/datum/sprite_accessory/ears/vulp,
+		/datum/sprite_accessory/ears/broad,
 		/datum/sprite_accessory/ears/husky,
 		/datum/sprite_accessory/ears/jellyfish,
 		/datum/sprite_accessory/ears/kangaroo,
@@ -234,13 +251,18 @@
 	default_disabled = TRUE
 
 /datum/customizer_choice/organ/ears/lizard
-	name = "Sissean Hood"
+	name = "Zardman Hood"
 	organ_type = /obj/item/organ/ears/anthro
 	generic_random_pick = TRUE
 	sprite_accessories = list(
 		/datum/sprite_accessory/ears/cobrahood,
 		/datum/sprite_accessory/ears/cobrahoodears,
 		)
+
+/datum/customizer/organ/ears/lamia
+	customizer_choices = list(/datum/customizer_choice/organ/ears/lizard, /datum/customizer_choice/organ/ears/elf)
+	allows_disabling = TRUE
+	default_disabled = TRUE
 
 /datum/customizer/organ/ears/tiefling
 	customizer_choices = list(/datum/customizer_choice/organ/ears/tiefling)
@@ -252,4 +274,62 @@
 	sprite_accessories = list(
 		/datum/sprite_accessory/ears/elf,
 		/datum/sprite_accessory/ears/elfw,
+		)
+/datum/customizer/organ/ears/dullahan
+	customizer_choices = list(/datum/customizer_choice/organ/ears/dullahan)
+	allows_disabling = TRUE
+	default_disabled = TRUE
+
+/datum/customizer_choice/organ/ears/dullahan
+	name = "Dullahan Ears"
+	organ_type = /obj/item/organ/ears
+	sprite_accessories = list(
+		/datum/sprite_accessory/ears/cat,
+		/datum/sprite_accessory/ears/axolotl,
+		/datum/sprite_accessory/ears/bat,
+		/datum/sprite_accessory/ears/bear,
+		/datum/sprite_accessory/ears/bigwolf,
+		/datum/sprite_accessory/ears/bigwolf_inner,
+		/datum/sprite_accessory/ears/rabbit,
+		/datum/sprite_accessory/ears/bunny,
+		/datum/sprite_accessory/ears/bunny_perky,
+		/datum/sprite_accessory/ears/bunny_long,
+		/datum/sprite_accessory/ears/big/rabbit_large,
+		/datum/sprite_accessory/ears/cat_big,
+		/datum/sprite_accessory/ears/cat_normal,
+		/datum/sprite_accessory/ears/cow,
+		/datum/sprite_accessory/ears/curled,
+		/datum/sprite_accessory/ears/deer,
+		/datum/sprite_accessory/ears/eevee,
+		/datum/sprite_accessory/ears/elf,
+		/datum/sprite_accessory/ears/elfw,
+		/datum/sprite_accessory/ears/elephant,
+		/datum/sprite_accessory/ears/fennec,
+		/datum/sprite_accessory/ears/fish,
+		/datum/sprite_accessory/ears/fox,
+		/datum/sprite_accessory/ears/vulp,
+		/datum/sprite_accessory/ears/broad,
+		/datum/sprite_accessory/ears/husky,
+		/datum/sprite_accessory/ears/jellyfish,
+		/datum/sprite_accessory/ears/kangaroo,
+		/datum/sprite_accessory/ears/lab,
+		/datum/sprite_accessory/ears/murid,
+		/datum/sprite_accessory/ears/otie,
+		/datum/sprite_accessory/ears/pede,
+		/datum/sprite_accessory/ears/sergal,
+		/datum/sprite_accessory/ears/shark,
+		/datum/sprite_accessory/ears/skunk,
+		/datum/sprite_accessory/ears/squirrel,
+		/datum/sprite_accessory/ears/wolf,
+		/datum/sprite_accessory/ears/perky,
+		/datum/sprite_accessory/ears/miqote,
+		/datum/sprite_accessory/ears/lunasune,
+		/datum/sprite_accessory/ears/sabresune,
+		/datum/sprite_accessory/ears/possum,
+		/datum/sprite_accessory/ears/raccoon,
+		/datum/sprite_accessory/ears/mouse,
+		/datum/sprite_accessory/ears/big/acrador_long,
+		/datum/sprite_accessory/ears/big/acrador_short,
+		/datum/sprite_accessory/ears/big/sandfox_large,
+		/datum/sprite_accessory/ears/lynx,
 		)

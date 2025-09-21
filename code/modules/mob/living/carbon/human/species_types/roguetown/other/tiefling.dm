@@ -35,7 +35,7 @@
 		OFFSET_ID = list(0,1), OFFSET_GLOVES = list(0,1), OFFSET_WRISTS = list(0,1),\
 		OFFSET_CLOAK = list(0,1), OFFSET_FACEMASK = list(0,1), OFFSET_HEAD = list(0,1), \
 		OFFSET_FACE = list(0,1), OFFSET_BELT = list(0,1), OFFSET_BACK = list(0,1), \
-		OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,1), \
+		OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,0), \
 		OFFSET_SHIRT = list(0,1), OFFSET_ARMOR = list(0,1), OFFSET_HANDS = list(0,1), OFFSET_UNDIES = list(0,1), \
 		OFFSET_ID_F = list(0,-1), OFFSET_GLOVES_F = list(0,0), OFFSET_WRISTS_F = list(0,0), OFFSET_HANDS_F = list(0,0), \
 		OFFSET_CLOAK_F = list(0,0), OFFSET_FACEMASK_F = list(0,-1), OFFSET_HEAD_F = list(0,-1), \
@@ -69,6 +69,7 @@
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
 		/datum/customizer/bodypart_feature/underwear,
+		/datum/customizer/bodypart_feature/legwear,
 		/datum/customizer/organ/horns/anthro,
 		/datum/customizer/organ/tail/tiefling,
 		/datum/customizer/organ/testicles/anthro,
@@ -126,7 +127,29 @@
 		"Vodyanev" = SKIN_COLOR_ABYSS,
 		"Calvus" = SKIN_COLOR_CALVUS,
 		"Voibion" = SKIN_COLOR_VOIBION,
-		"Chyerno" = SKIN_COLOR_CHYERNO
+		"Chyerno" = SKIN_COLOR_CHYERNO,
+		"Drema"	= SKIN_COLOR_DREMA,
+		"Chir"	= SKIN_COLOR_CHIR,
+		"Vesyl"	= SKIN_COLOR_VESYL
+	)
+
+/datum/species/tieberian/get_skin_list_tooltip()
+	return list(
+		"Jehoel <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_JEHOEL];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_JEHOEL,
+		"Urvix <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_URVIX];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_URVIX,
+		"Sarvyra <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SARVYRA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SARVYRA,
+		"Vheslyn <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_VHESLYN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_VHESLYN,
+		"Arlenneth <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_ARLENNETH];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_ARLENNETH,
+		"Nessyss <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_NESSYSS];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_NESSYSS,
+		"Helixia <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_HELIXIA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_HELIXIA,
+		"Nymsea <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_NYMSEA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_NYMSEA,
+		"Vodyanev <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_ABYSS];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_ABYSS,
+		"Calvus <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_CALVUS];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_CALVUS,
+		"Voibion <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_VOIBION];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_VOIBION,
+		"Chyerno <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_CHYERNO];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_CHYERNO,
+		"Drema <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_DREMA];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_DREMA,
+		"Chir <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_CHIR];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_CHIR,
+		"Vesyl <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_VESYL];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_VESYL
 	)
 
 /datum/species/tieberian/get_hairc_list()

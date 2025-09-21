@@ -1,35 +1,41 @@
-#define PATREONT1 "[global.config.directory]/roguetown/patreon/p1.txt"
-#define PATREONT2 "[global.config.directory]/roguetown/patreon/p2.txt"
-#define PATREONT3 "[global.config.directory]/roguetown/patreon/p3.txt"
-#define PATREONT4 "[global.config.directory]/roguetown/patreon/p4.txt"
-#define PATREONT5 "[global.config.directory]/roguetown/patreon/p5.txt"
-
 #define PATREON_FILE "data/Members_7968561.csv"
 
-GLOBAL_LIST_EMPTY(patreont1)
-GLOBAL_LIST_EMPTY(patreont2)
-GLOBAL_LIST_EMPTY(patreont3)
-GLOBAL_LIST_EMPTY(patreont4)
-GLOBAL_LIST_EMPTY(patreont5)
+// Vrell - IDK Who hardcoded the patreon lists but I'm changing that. Also, conventient defines.
+// TODO - MOVE THESE TO A CONFIG FILE OR SOMETHING IDFK
+#define HIGHESTPATREONLEVEL 9
+
+// V - Yeah not sure if there's a better way to do this but fuck it, it works.
+GLOBAL_LIST_INIT(patreonlevelnames, list("Squire", "Knight", "Knight Captain", "Marshal", "Jester", "Steward", "Heir", "Consort", "Grand Baron"))
+GLOBAL_LIST_INIT(patreonlevelcolors, list("#f2f2f2", "#f2f2f2", "#9e004f", "#b30000", "#ff66ff", "#009900", "#0000cc", "#cc00cc", "#ff7a05")) // TODO - REPLACE THESE COLOR CODES WITH ONES OF YOUR CHOOSING!!! I KINDA JUST PICKED SOME.
+
+GLOBAL_LIST_INIT(patreonlevels, new/list(HIGHESTPATREONLEVEL))
 GLOBAL_LIST_EMPTY(allpatreons)
 GLOBAL_VAR(PatreonsLoaded)
 
 /proc/load_patreons()
 	if(GLOB.PatreonsLoaded)
 		return
+
+	for(var/i = 1, i <= HIGHESTPATREONLEVEL, ++i)
+		if(GLOB.patreonlevels[i] == null)
+			GLOB.patreonlevels[i] = new/list(0)
+
 	var/csv_file = file(PATREON_FILE)
 	var/list/csvlist
 	if(fexists(csv_file))
 		csvlist = world.file2list(csv_file)
 
-	for(var/line in world.file2list(PATREONT1))
-		if(!line)
-			continue
-		if(findtextEx(line,"#",1,2))
-			continue
-		GLOB.patreont1 |= ckey(line)
-		GLOB.allpatreons |= ckey(line)
+	for(var/i = 1, i <= HIGHESTPATREONLEVEL, ++i)
+		for(var/line in world.file2list("[global.config.directory]/roguetown/patreon/p[i].txt"))
+			if(!line)
+				continue
+			if(findtextEx(line,"#",1,2))
+				continue
+			GLOB.patreonlevels[i] |= ckey(line)
+			GLOB.allpatreons |= ckey(line)
 
+	// V - I've got no idea what to do about these here. I don't have the original csv for these.
+	// TODO - SOMEONE REFACTOR THIS ONCE YOU FIGURE OUT HOW YOU WANT TO HANDLE TRANSFERING PATREONS TO THIS DATA SET!!! ALSO MAYBE SET THIS UP TO WORK OFF THE SERVER'S DATABASE!!!!
 	for(var/line in csvlist)
 		if(findtext(line, "ROGUETOWN SILVER"))
 			if(findtext(line, "Active patron"))
@@ -39,15 +45,7 @@ GLOBAL_VAR(PatreonsLoaded)
 //				player_email = sanitize_simple(player_email,list("@"="AT","."="DOT"))
 				var/find_ckey = patemail2ckey(player_email)
 				if(find_ckey)
-					GLOB.patreont1 |= find_ckey
-
-	for(var/line in world.file2list(PATREONT2))
-		if(!line)
-			continue
-		if(findtextEx(line,"#",1,2))
-			continue
-		GLOB.patreont2 |= ckey(line)
-		GLOB.allpatreons |= ckey(line)
+					GLOB.patreonlevels[1] |= find_ckey
 
 	for(var/line in csvlist)
 		if(findtext(line, "ROGUETOWN GOLD"))
@@ -58,15 +56,7 @@ GLOBAL_VAR(PatreonsLoaded)
 //				player_email = sanitize_simple(player_email,list("@"="AT","."="DOT"))
 				var/find_ckey = patemail2ckey(player_email)
 				if(find_ckey)
-					GLOB.patreont2 |= find_ckey
-
-	for(var/line in world.file2list(PATREONT3))
-		if(!line)
-			continue
-		if(findtextEx(line,"#",1,2))
-			continue
-		GLOB.patreont3 |= ckey(line)
-		GLOB.allpatreons |= ckey(line)
+					GLOB.patreonlevels[2] |= find_ckey
 
 	for(var/line in csvlist)
 		if(findtext(line, "ROGUETOWN MYTHRIL"))
@@ -77,15 +67,7 @@ GLOBAL_VAR(PatreonsLoaded)
 //				player_email = sanitize_simple(player_email,list("@"="AT","."="DOT"))
 				var/find_ckey = patemail2ckey(player_email)
 				if(find_ckey)
-					GLOB.patreont3 |= find_ckey
-
-	for(var/line in world.file2list(PATREONT4))
-		if(!line)
-			continue
-		if(findtextEx(line,"#",1,2))
-			continue
-		GLOB.patreont4 |= ckey(line)
-		GLOB.allpatreons |= ckey(line)
+					GLOB.patreonlevels[3] |= find_ckey
 
 	for(var/line in csvlist)
 		if(findtext(line, "ROGUETOWN MERCHANT"))
@@ -96,15 +78,7 @@ GLOBAL_VAR(PatreonsLoaded)
 //				player_email = sanitize_simple(player_email,list("@"="AT","."="DOT"))
 				var/find_ckey = patemail2ckey(player_email)
 				if(find_ckey)
-					GLOB.patreont4 |= find_ckey
-
-	for(var/line in world.file2list(PATREONT5))
-		if(!line)
-			continue
-		if(findtextEx(line,"#",1,2))
-			continue
-		GLOB.patreont5 |= ckey(line)
-		GLOB.allpatreons |= ckey(line)
+					GLOB.patreonlevels[4] |= find_ckey
 
 	for(var/line in csvlist)
 		if(findtext(line, "ROGUETOWN LORD"))
@@ -115,7 +89,7 @@ GLOBAL_VAR(PatreonsLoaded)
 //				player_email = sanitize_simple(player_email,list("@"="AT","."="DOT"))
 				var/find_ckey = patemail2ckey(player_email)
 				if(find_ckey)
-					GLOB.patreont5 |= find_ckey
+					GLOB.patreonlevels[5] |= find_ckey
 
 	GLOB.PatreonsLoaded = TRUE
 
@@ -128,16 +102,9 @@ GLOBAL_VAR(PatreonsLoaded)
 	if(!GLOB.PatreonsLoaded)
 		return get_patreon_manual(ckey)
 	var/num1 = 0
-	if(ckey in GLOB.patreont1)
-		num1 = 1
-	if(ckey in GLOB.patreont2)
-		num1 = 2
-	if(ckey in GLOB.patreont3)
-		num1 = 3
-	if(ckey in GLOB.patreont4)
-		num1 = 4
-	if(ckey in GLOB.patreont5)
-		num1 = 5
+	for(var/i = 1, i <= HIGHESTPATREONLEVEL, ++i)
+		if(ckey in GLOB.patreonlevels[i])
+			num1 = i
 	return num1
 
 /proc/get_patreon_manual(ckey)
@@ -173,56 +140,56 @@ GLOBAL_VAR(PatreonsLoaded)
 					return 5
 			return 0
 
-#undef PATREONT1
-#undef PATREONT2
-#undef PATREONT3
-#undef PATREONT4
-#undef PATREONT5
+// TODO - If you add patreon verb perks, clean this up!!!!
 
-GLOBAL_LIST_INIT(pleveloneverbs, world.pleveloneverbs())
-GLOBAL_PROTECT(pleveloneverbs)
-/world/proc/pleveloneverbs()
-	return list(
-	)
+// VRELL - yeah guess I'm setting up the basics of perks.
 
-GLOBAL_LIST_INIT(pleveltwoverbs, world.pleveltwoverbs())
-GLOBAL_PROTECT(pleveltwoverbs)
-/world/proc/pleveltwoverbs()
-	return list(
-	)
+// Stuff for player text.
+GLOBAL_VAR_INIT(patreonsaylevel, 4) // Minimum patreon level that the fancy say color applies to. 
+/client/proc/patreon_say_color_toggle()
+	set name = "Toggle Say Color"
+	set category = "Patreon"
+	set desc = ""
 
-GLOBAL_LIST_INIT(plevelthreeverbs, world.plevelthreeverbs())
-GLOBAL_PROTECT(plevelthreeverbs)
-/world/proc/plevelthreeverbs()
-	return list(
-	)
+	if(prefs)
+		to_chat(src, span_info("[prefs.patreon_say_color_enabled ? "Your voice will appear as any other.": "<font color='[prefs.patreon_say_color]'>Your voice will use the color you choose.</font>"]"))
+		prefs.patreon_say_color_enabled = !prefs.patreon_say_color_enabled
+		prefs.save_preferences()
+	else
+		to_chat(src, "<font color='red'>Preferences not loaded! This is a bug or you need to wait for things to load first.</font>")
 
-GLOBAL_LIST_INIT(plevelfourverbs, world.plevelfourverbs())
-GLOBAL_PROTECT(plevelfourverbs)
-/world/proc/plevelfourverbs()
-	return list(
-	)
+/client/proc/patreon_say_color_set()
+	set name = "Change Say Color"
+	set category = "Patreon"
+	set desc = ""
 
-GLOBAL_LIST_INIT(plevelfiveverbs, world.plevelfiveverbs())
-GLOBAL_PROTECT(plevelfiveverbs)
-/world/proc/plevelfiveverbs()
-	return list(
-	)
+	if(prefs)
+		var/new_color = input(src, "Choose your voice color:", "Patreon Preference","#"+prefs.patreon_say_color) as color|null
+		if(new_color)
+			if(color_hex2num(new_color) < 230)
+				to_chat(src, "<font color='red'>This voice color is too dark.</font>")
+				return
 
+			prefs.patreon_say_color = sanitize_hexcolor(new_color)
+			if(prefs.patreon_say_color_enabled)
+				to_chat(src, "<font color='[prefs.patreon_say_color]'>Voice color set.</font>")
+			else
+				prefs.patreon_say_color_enabled = TRUE
+				to_chat(src, "<font color='[prefs.patreon_say_color]'>Voice color set and enabled.</font>")
+			prefs.save_preferences()
+		else
+			to_chat(src, "<font color='red'>No voice color selected.</font>")
+	else
+		to_chat(src, "<font color='red'>Preferences not loaded! This is a bug or you need to wait for things to load first.</font>")
+
+// Vrell - WOO WE LOVE HACKY FIXES!!!
 /client/proc/add_patreon_verbs()
-	set waitfor = 0
-	var/plev = check_patreon_lvl(ckey)
+	set waitfor = 0 // wtf is this for? leaving it in case it breaks something to not have it.
+	var/plev = patreonlevel() // Better to do it this way so all the safeguards and stuff get passed through.
 
-	if(plev > 1)
-		verbs |= GLOB.pleveloneverbs
-	if(plev > 2)
-		verbs |= GLOB.pleveltwoverbs
-	if(plev > 3)
-		verbs |= GLOB.plevelthreeverbs
-	if(plev > 4)
-		verbs |= GLOB.plevelfourverbs
-	if(plev > 5)
-		verbs |= GLOB.plevelfiveverbs
+	if(plev >= GLOB.patreonsaylevel)
+		verbs += /client/proc/patreon_say_color_toggle
+		verbs += /client/proc/patreon_say_color_set
 
 GLOBAL_LIST_EMPTY(hiderole)
 
@@ -265,13 +232,22 @@ GLOBAL_LIST_EMPTY(anonymize)
 
 GLOBAL_LIST_EMPTY(temporary_donators)
 
-
 /client/proc/patreonlevel()
 	if(patreonlevel != -1)
 		return patreonlevel
 	else
 		patreonlevel = check_patreon_lvl(ckey)
+		if(patreonlevel != -1)
+			updatepatreonperks() //stops infinite loop in the event that for some reason the patreon level is just -1.
 		return patreonlevel
+
+/client/proc/updatepatreonperks()
+	if(patreonlevel == -1)
+		patreonlevel(); // Vrell - If we try and get patreon perks without a level loaded, we need a fallback.
+		return FALSE; // Vrell - IDK who may want this but hey you have very rudimentary error stuff now.
+	patreon_colored_say_allowed = (patreonlevel >= GLOB.patreonsaylevel) //We have a variable for this because someone might leave it on and then lose their patreon perks.
+	// TODO - SLAP YOUR PATREON STUFF HERE!
+	return TRUE;
 
 /proc/patemail2ckey(input)
 	if(!input)
@@ -335,15 +311,15 @@ GLOBAL_LIST_EMPTY(temporary_donators)
 	for(var/line in csvlist)
 		if(findtext(line, email))
 			if(findtext(line, "ROGUETOWN SILVER"))
-				GLOB.patreont1 |= ckey
+				GLOB.patreonlevels[1] |= ckey
 			if(findtext(line, "ROGUETOWN GOLD"))
-				GLOB.patreont2 |= ckey
+				GLOB.patreonlevels[2] |= ckey
 			if(findtext(line, "ROGUETOWN MYTHRIL"))
-				GLOB.patreont3 |= ckey
+				GLOB.patreonlevels[3] |= ckey
 			if(findtext(line, "ROGUETOWN MERCHANT"))
-				GLOB.patreont4 |= ckey
+				GLOB.patreonlevels[4] |= ckey
 			if(findtext(line, "ROGUETOWN LORD"))
-				GLOB.patreont5 |= ckey
+				GLOB.patreonlevels[5] |= ckey
 			break
 
 	var/json_file = file("data/patemail2ckey.json")

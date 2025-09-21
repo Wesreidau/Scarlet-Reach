@@ -30,8 +30,8 @@
 /mob/living/carbon/human/death(gibbed, nocutscene = FALSE)
 	if(stat == DEAD)
 		return
-
 	var/area/A = get_area(src)
+	dna?.species?.stop_wagging_tail(src)
 
 	if(client)
 		SSdroning.kill_droning(client)
@@ -141,11 +141,15 @@
 					continue
 				if(HAS_TRAIT(HU, TRAIT_STEELHEARTED))
 					continue
-				if(HU.isFamily(src))
-					if(istype(HU.getRelationship(src),/datum/relation/spouse))
-						HU.adjust_triumphs(-1)
+
 
 	. = ..()
+
+	if(isdullahan(src))
+		var/datum/species/dullahan/user_species = src.dna.species
+		if(user_species.headless)
+			user_species.soul_light_off()
+			update_body()
 
 	dizziness = 0
 	jitteriness = 0
@@ -160,7 +164,7 @@
 	if(!.)
 		return
 	switch(job)
-		if("Grand Duke")
+		if("Grand Duke", "Grand Duchess")
 			removeomen(OMEN_NOLORD)
 		if("Priest")
 			removeomen(OMEN_NOPRIEST)
@@ -171,8 +175,6 @@
 		if(CA != src && !HAS_TRAIT(CA, TRAIT_BLIND))
 			if(HAS_TRAIT(CA, TRAIT_STEELHEARTED))
 				continue
-			if(CA.isFamily(src))
-				if(istype(CA.getRelationship(src),/datum/relation/spouse))
-					CA.adjust_triumphs(-1)
+
 			CA.add_stress(/datum/stressevent/viewgib)
 	return ..()

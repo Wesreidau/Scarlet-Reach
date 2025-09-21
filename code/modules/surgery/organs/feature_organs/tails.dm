@@ -14,7 +14,7 @@
 	accessory_type = /datum/sprite_accessory/tail/catbig
 
 /obj/item/organ/tail/lizard
-	name = "sissean tail"
+	name = "zardman tail"
 	desc = "A severed lizard tail. Somewhere, no doubt, a lizard hater is very pleased with themselves."
 	color = "#116611"
 	accessory_type = /datum/sprite_accessory/tail/lizard/smooth
@@ -59,12 +59,16 @@
 	name = "tiefling tail"
 	accessory_type =  /datum/sprite_accessory/tail/tiefling
 
+/obj/item/organ/tail/dullahan
+	name = "dullahan tail"
+	accessory_type =  /datum/sprite_accessory/tail/dullahan
+
 /obj/item/organ/tail/akula
 	name = "axian tail"
 	accessory_type =  /datum/sprite_accessory/tail/shark
 
 /obj/item/organ/tail/lizard
-	name = "sissean tail"
+	name = "zardman tail"
 	desc = ""
 	color = "#116611"
 	accessory_type =  /datum/sprite_accessory/tail/lizard/smooth

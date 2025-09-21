@@ -36,7 +36,7 @@
 	offset_features = list(OFFSET_ID = list(0,1), OFFSET_GLOVES = list(0,1), OFFSET_WRISTS = list(0,1),\
 	OFFSET_CLOAK = list(0,1), OFFSET_FACEMASK = list(0,1), OFFSET_HEAD = list(0,1), \
 	OFFSET_FACE = list(0,1), OFFSET_BELT = list(0,1), OFFSET_BACK = list(0,1), \
-	OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,1), \
+	OFFSET_NECK = list(0,1), OFFSET_MOUTH = list(0,1), OFFSET_PANTS = list(0,0), \
 	OFFSET_SHIRT = list(0,1), OFFSET_ARMOR = list(0,1), OFFSET_HANDS = list(0,1), OFFSET_UNDIES = list(0,1), \
 	OFFSET_ID_F = list(0,1), OFFSET_GLOVES_F = list(0,1), OFFSET_WRISTS_F = list(0,1), OFFSET_HANDS_F = list(0,1), \
 	OFFSET_CLOAK_F = list(0,1), OFFSET_FACEMASK_F = list(0,1), OFFSET_HEAD_F = list(0,1), \
@@ -79,6 +79,7 @@
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
 		/datum/customizer/bodypart_feature/underwear,
+		/datum/customizer/bodypart_feature/legwear,
 		/datum/customizer/organ/testicles/anthro,
 		/datum/customizer/organ/penis/anthro,
 		/datum/customizer/organ/breasts/human,
@@ -117,6 +118,19 @@
 		"Murkwalker" = SKIN_COLOR_MURKWALKER,
 		"Shatterhorn" = SKIN_COLOR_SHATTERHORN,
 		"Spirit Crusher" = SKIN_COLOR_SPIRITCRUSHER
+	)
+
+/datum/species/halforc/get_skin_list_tooltip()
+	return list(
+		"Shellcrest <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SHELLCREST];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SHELLCREST,
+		"Bloodaxe <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_BLOOD_AXE];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_BLOOD_AXE,
+		"Splitjaw <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_GROONN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_GROONN,
+		"Blackhammer <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_BLACK_HAMMER];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_BLACK_HAMMER,
+		"Skullseeker <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SKULL_SEEKER];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SKULL_SEEKER,
+		"Crescent Fang <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_CRESCENT_FANG];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_CRESCENT_FANG,
+		"Murkwalker <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_MURKWALKER];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_MURKWALKER,
+		"Shatterhorn <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SHATTERHORN];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SHATTERHORN,
+		"Spirit Crusher <span style='border: 1px solid #161616; background-color: #[SKIN_COLOR_SPIRITCRUSHER];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" = SKIN_COLOR_SPIRITCRUSHER
 	)
 
 /datum/species/halforc/get_hairc_list()

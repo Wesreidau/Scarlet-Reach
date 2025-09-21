@@ -7,6 +7,7 @@
 	)
 	roundstart = TRUE
 	antag_flag = ROLE_BANDIT
+	max_occurrences = 0
 	shared_occurence_type = SHARED_MINOR_THREAT
 
 	restricted_roles = list(
@@ -30,11 +31,12 @@
 		"Court Physician",
 		"Town Elder",
 		"Captain",
-		"Archivist",
+		"Loudmouth",
 		"Knight",
 		"Court Magician",
 		"Inquisitor",
 		"Orthodoxist",
+		"Absolver",
 		"Warden",
 		"Squire",
 		"Veteran",
@@ -46,10 +48,22 @@
 
 	earliest_start = 0 SECONDS
 
-	weight = 16
+	weight = 0
 
 	typepath = /datum/round_event/antagonist/solo/bandits
 	antag_datum = /datum/antagonist/bandit
+
+/datum/round_event_control/antagonist/solo/bandits/canSpawnEvent(players_amt, gamemode, fake_check)
+	. = ..()
+	if(!.)
+		return
+	var/list/candidates = get_candidates()
+	
+	// Allow the event to run if there's at least 1 candidate, even if fewer than desired
+	if(length(candidates) < 1)
+		return FALSE
+	
+	return TRUE
 
 /datum/round_event/antagonist/solo/bandits
 	var/leader = FALSE

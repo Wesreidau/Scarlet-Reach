@@ -433,14 +433,33 @@
 
 	emote("grimace", intentional = TRUE)
 
-/datum/emote/living/jump
+/datum/emote/living/jump // i see absolutely zero fucking reason for why this shit doesnt print an emote and a runechat text, jump_fixed on the other hand works juuust fine
 	key = "jump"
+	key_third_person = "jumps"
+	message = "jumps!"
+	restraint_check = TRUE
+
+/datum/emote/living/jump_deathless //literally doesnt have a 'UH!!' sound, thats it
+	key = "jump_deathless"
+	key_third_person = "jumps"
+	message = "jumps!"
+	restraint_check = TRUE
+
+/datum/emote/living/jump_fixed // see above
+	key = "jump_fixed"
 	key_third_person = "jumps"
 	message = "jumps!"
 	restraint_check = TRUE
 
 /datum/emote/living/leap
 	key = "leap"
+	key_third_person = "leaps"
+	message = "leaps!"
+	restraint_check = TRUE
+	only_forced_audio = TRUE
+
+/datum/emote/living/leap_deathless //literally doesnt have a 'UH!!' sound, thats it
+	key = "leap_deathless"
 	key_third_person = "leaps"
 	message = "leaps!"
 	restraint_check = TRUE
@@ -546,7 +565,7 @@
 	if(!user || !target)
 		return
 	if(ishuman(target))
-		playsound(target.loc, pick('sound/vo/hug.ogg'), 100, FALSE, -1)
+		playsound(target.loc, pick('sound/body/hug.ogg'), 100, FALSE, -1)
 		if(user.mind)
 			GLOB.scarlet_round_stats[STATS_HUGS_MADE]++
 			SEND_SIGNAL(user, COMSIG_MOB_HUGGED, target)
@@ -1748,7 +1767,7 @@
 
 /datum/emote/living/fsalute/run_emote(mob/living/user, params, type_override, intentional, targetted, animal)
 	. = ..()
-	if(. && !isnull(user.patron) && !HAS_TRAIT(user, TRAIT_DECEIVING_MEEKNESS))	//Guarded doesn't show an icon to anyone.
+	if(. && !isnull(user.patron))
 		user.play_overhead_indicator('icons/mob/overhead_effects.dmi', "stress", 15, MUTATIONS_LAYER, private = user.patron.type, soundin = 'sound/magic/holyshield.ogg', y_offset = 32)
 
 /mob/living/carbon/human/verb/emote_fsalute()
@@ -1773,3 +1792,44 @@
 	set category = "Emotes"
 
 	emote("ffsalute", intentional =  TRUE)
+
+/datum/emote/living/praysuicide
+    key = "praysuicide"
+    key_third_person = "utters their last words"
+    message = ""                   
+    emote_type = EMOTE_AUDIBLE
+    stat_allowed = UNCONSCIOUS      
+    show_runechat = FALSE
+
+/mob/living/carbon/human/verb/emote_praysuicide()
+    set name = "Pray for suicide"
+    set category = "Emotes"
+    emote("praysuicide", intentional = TRUE)
+
+/datum/emote/living/praysuicide/run_emote(mob/user, params, type_override, intentional)
+    if(!user)
+        return FALSE
+
+    var/mob/living/L = user
+
+
+    to_chat(L, span_danger("I pray to my patron for my death... and I am heard."))
+
+
+    var/lastmsg = params
+    if(!lastmsg)
+        lastmsg = input("Whisper your final words:", "Last Words") as text|null
+    if(!lastmsg)
+        return FALSE
+
+    L.whisper(lastmsg)
+
+    if(iscarbon(L))
+        var/mob/living/carbon/C = L
+        C.adjustOxyLoss(200)
+    else if(isliving(L))
+        L.death()
+    else
+        to_chat(L, span_warning("Nothing happens."))
+
+    return TRUE   

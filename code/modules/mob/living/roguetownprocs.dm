@@ -50,6 +50,9 @@
 	if(istype(user.rmb_intent, /datum/rmb_intent/swift))
 		chance2hit -= 20
 
+	if(HAS_TRAIT(user, TRAIT_CURSE_RAVOX))
+		chance2hit -= 30
+
 	chance2hit = CLAMP(chance2hit, 5, 93)
 
 	if(prob(chance2hit))
@@ -227,6 +230,9 @@
 					var/sentinel = SH.calculate_sentinel_bonus()
 					prob2defend += sentinel
 
+			if(HAS_TRAIT(H, TRAIT_CURSE_RAVOX))
+				prob2defend -= 30
+
 			prob2defend = clamp(prob2defend, 5, 90)
 			if(HAS_TRAIT(user, TRAIT_HARDSHELL) && H.client)	//Dwarf-merc specific limitation w/ their armor on in pvp
 				prob2defend = clamp(prob2defend, 5, 70)
@@ -261,8 +267,8 @@
 					else//If we're defending against or as a dual wielder, we roll disadv. But if we're both dual wielding it cancels out.
 						text += " Twice! Disadvantage! ([(prob2defend / 100) * (prob2defend / 100) * 100]%)"
 				to_chat(src, span_info("[text]"))
-			
-			var/attacker_feedback 
+
+			var/attacker_feedback
 			if(user.client?.prefs.showrolls && (attacker_dualw || defender_dualw))
 				attacker_feedback = "Attacking with advantage. ([100 - ((prob2defend / 100) * (prob2defend / 100) * 100)]%)"
 
@@ -349,45 +355,11 @@
 
 					var/dam2take = round((get_complex_damage(AB,user,used_weapon.blade_dulling)/2),1)
 					if(dam2take)
-						if(!user.mind)
-							dam2take = dam2take * 0.25
-						if(dam2take > 0 && (intenty.masteritem?.intdamage_factor != 1 || intenty.intent_intdamage_factor != 1))
-							var/higher_intfactor = max(intenty.masteritem?.intdamage_factor, intenty.intent_intdamage_factor)
-							var/lowest_intfactor = min(intenty.masteritem?.intdamage_factor, intenty.intent_intdamage_factor)
-							var/used_intfactor
-							if(lowest_intfactor < 1)	//Our intfactor multiplier can be either 0 to 1, or 1 to whatever.
-								used_intfactor = lowest_intfactor
-							if(higher_intfactor > 1)	//Make sure to keep your weapon and intent intfactors consistent to avoid problems here!
-								used_intfactor = higher_intfactor
-							dam2take *= used_intfactor
-					else	//This is normally handled in get_complex_damage, but it doesn't support simple mobs... at all, so we do a clunky mini-version of it.
-						if(istype(user, /mob/living/simple_animal))
-							var/mob/living/simple_animal/SM = user
-							dam2take = rand(SM.melee_damage_lower, SM.melee_damage_upper)
-							dam2take *= (SM.STASTR / 10)
-							dam2take *= 0.25
-							switch(used_weapon.blade_dulling)
-								if(DULLING_SHAFT_CONJURED)
-									dam2take *= 1.3
-								if(DULLING_SHAFT_METAL)
-									switch(SM.d_type)
-										if("slash")
-											dam2take *= 0.5
-										if("blunt")
-											dam2take *= 1.5
-								if(DULLING_SHAFT_WOOD)
-									switch(SM.d_type)
-										if("slash")
-											dam2take *= 1.5
-										if("blunt")
-											dam2take *= 0.5
-								if(DULLING_SHAFT_REINFORCED)
-									switch(SM.d_type)
-										if("slash")
-											dam2take *= 0.75
-										if("stab")
-											dam2take *= 1.5
-					used_weapon.take_damage(max(dam2take,1), BRUTE, used_weapon.d_type)
+						var/intdam = used_weapon.max_blade_int ? INTEG_PARRY_DECAY : INTEG_PARRY_DECAY_NOSHARP
+						if(used_weapon == offhand)
+							intdam = INTEG_PARRY_DECAY_NOSHARP
+						used_weapon.take_damage(intdam, BRUTE, used_weapon.d_type)
+						used_weapon.remove_bintegrity(SHARPNESS_ONHIT_DECAY, user)
 					return TRUE
 				else
 					return FALSE
@@ -519,6 +491,10 @@
 				src.visible_message(span_boldwarning("<b>[src]</b> ripostes [user] with [W]!"))
 			else
 				src.visible_message(span_boldwarning("<b>[src]</b> parries [user] with [W]!"))
+			if(W.max_blade_int)
+				W.remove_bintegrity(SHARPNESS_ONHIT_DECAY, user)
+			else
+				W.take_damage(INTEG_PARRY_DECAY_NOSHARP, BRUTE, "slash")
 			return TRUE
 		else
 			to_chat(src, span_warning("I'm too tired to parry!"))
@@ -577,7 +553,8 @@
 			prob2defend = prob2defend - ( I.wbalance * ((U.STASPD - L.STASPD) * 10) )
 		if(I.wbalance == WBALANCE_HEAVY && L.STASPD > U.STASPD) //nme weapon is slow, so its easier to dodge if we're faster
 			prob2defend = prob2defend + ( I.wbalance * ((U.STASPD - L.STASPD) * 10) )
-		prob2defend = prob2defend - (UH.get_skill_level(I.associated_skill) * 10)
+		if(!(H?.check_dodge_skill()))
+			prob2defend = prob2defend - (UH.get_skill_level(I.associated_skill) * 10)
 	if(H)
 		if(!H?.check_armor_skill() || H?.legcuffed)
 			H.Knockdown(1)
@@ -586,7 +563,8 @@
 			if(!I.associated_skill) //the enemy weapon doesn't have a skill because its improvised, so penalty to attack
 				prob2defend = prob2defend + 10
 			else
-				prob2defend = prob2defend + (H.get_skill_level(I.associated_skill) * 10)
+				if(!(H?.check_dodge_skill()))
+					prob2defend = prob2defend + (H.get_skill_level(I.associated_skill) * 10)
 		else //the enemy attacked us unarmed or is nonhuman
 			if(UH)
 				if(UH.used_intent.unarmed)
@@ -606,6 +584,9 @@
 		if(HAS_TRAIT(H, TRAIT_SENTINELOFWITS))
 			var/sentinel = H.calculate_sentinel_bonus()
 			prob2defend += sentinel
+
+		if(HAS_TRAIT(H, TRAIT_CURSE_RAVOX))
+			prob2defend -= 30
 
 		prob2defend = clamp(prob2defend, 5, 90)
 
@@ -632,7 +613,7 @@
 				attacker_dualw = TRUE
 		//----------Dual Wielding check end---------
 
-		var/attacker_feedback 
+		var/attacker_feedback
 		if(user.client?.prefs.showrolls && (attacker_dualw || defender_dualw))
 			attacker_feedback = "Attacking with advantage. ([100 - ((prob2defend / 100) * (prob2defend / 100) * 100)]%)"
 
@@ -697,47 +678,9 @@
 			var/lucmod = L.STALUC - U.STALUC
 			probclip += lucmod * 10
 		if(prob(probclip) && IS && IU)
-			var/dam2take = round((get_complex_damage(IU, user, FALSE)/2),1)
-			if(dam2take)
-				if(!user.mind)
-					dam2take = dam2take * 0.25
-				if(dam2take > 0 && (user.used_intent.masteritem?.intdamage_factor != 1 || user.used_intent.intent_intdamage_factor != 1))
-					var/higher_intfactor = max(user.used_intent.masteritem?.intdamage_factor, user.used_intent.intent_intdamage_factor)
-					var/lowest_intfactor = min(user.used_intent.masteritem?.intdamage_factor, user.used_intent.intent_intdamage_factor)
-					var/used_intfactor
-					if(lowest_intfactor < 1)	//Our intfactor multiplier can be either 0 to 1, or 1 to whatever.
-						used_intfactor = lowest_intfactor
-					if(higher_intfactor > 1)	//Make sure to keep your weapon and intent intfactors consistent to avoid problems here!
-						used_intfactor = higher_intfactor
-					dam2take *= used_intfactor
-				else
-					if(istype(user, /mob/living/simple_animal))
-						var/mob/living/simple_animal/SM = user
-						dam2take = rand(SM.melee_damage_lower, SM.melee_damage_upper)
-						dam2take *= (SM.STASTR / 10)
-						dam2take *= 0.25
-						switch(IS.blade_dulling)
-							if(DULLING_SHAFT_CONJURED)
-								dam2take *= 1.3
-							if(DULLING_SHAFT_METAL)
-								switch(SM.d_type)
-									if("slash")
-										dam2take *= 0.5
-									if("blunt")
-										dam2take *= 1.5
-							if(DULLING_SHAFT_WOOD)
-								switch(SM.d_type)
-									if("slash")
-										dam2take *= 1.5
-									if("blunt")
-										dam2take *= 0.5
-							if(DULLING_SHAFT_REINFORCED)
-								switch(SM.d_type)
-									if("slash")
-										dam2take *= 0.75
-									if("stab")
-										dam2take *= 1.5
-				IS.take_damage(max(dam2take,1), BRUTE, IU.d_type)
+			var/intdam = IS.max_blade_int ? INTEG_PARRY_DECAY : INTEG_PARRY_DECAY_NOSHARP
+			IS.take_damage(intdam, BRUTE, IU.d_type)
+			IS.remove_bintegrity(SHARPNESS_ONHIT_DECAY, src)
 
 			user.visible_message(span_warning("<b>[user]</b> clips [src]'s weapon!"))
 			playsound(user, 'sound/misc/weapon_clip.ogg', 100)
@@ -840,31 +783,29 @@
 	if(H.has_status_effect(/datum/status_effect/buff/clash))	//They also have Clash active. It'll trigger the special event.
 		clash(user, IM, IU)
 	else	//Otherwise, we just riposte them.
-		var/damage = get_complex_damage(IM, src, IU.blade_dulling)
-		if(IM.intdamage_factor != 1 || used_intent.intent_intdamage_factor != 1)
-			var/higher_intfactor = max(IM.intdamage_factor, used_intent.intent_intdamage_factor)
-			var/lowest_intfactor = min(IM.intdamage_factor, used_intent.intent_intdamage_factor)
-			var/used_intfactor
-			if(lowest_intfactor < 1)	//Our intfactor multiplier can be either 0 to 1, or 1 to whatever.
-				used_intfactor = lowest_intfactor
-			if(higher_intfactor > 1)	//Make sure to keep your weapon and intent intfactors consistent to avoid problems here!
-				used_intfactor = higher_intfactor
-			damage *= used_intfactor
-		if(IM.wbalance == WBALANCE_HEAVY)
-			damage *= 1.5
-		IU.take_damage(max(damage,1), BRUTE, IM.d_type)
+		var/sharpnesspenalty = SHARPNESS_ONHIT_DECAY * 5
+		if(IM.wbalance == WBALANCE_HEAVY || IU.blade_dulling == DULLING_SHAFT_CONJURED)
+			sharpnesspenalty *= 2
+		if(IU.max_blade_int)
+			IU.remove_bintegrity(sharpnesspenalty, user)
+		else
+			var/integdam = INTEG_PARRY_DECAY_NOSHARP * 5
+			if(IU.blade_dulling == DULLING_SHAFT_CONJURED)
+				integdam *= 2
+			IU.take_damage(integdam, BRUTE, IM.d_type)
 		visible_message(span_suicide("[src] ripostes [H] with \the [IM]!"))
 		playsound(src, 'sound/combat/clash_struck.ogg', 100)
 		var/staminadef = (stamina * 100) / max_stamina
 		var/staminaatt = (H.stamina * 100) / H.max_stamina
-		if(staminadef > staminaatt) 
+		if(staminadef > staminaatt)
 			H.apply_status_effect(/datum/status_effect/debuff/exposed, 2 SECONDS)
 			H.apply_status_effect(/datum/status_effect/debuff/clickcd, 3 SECONDS)
 			H.Slowdown(3)
-			to_chat(src, span_notice("[H.p_theyre()] exposed!"))
+			to_chat(src, span_notice("[capitalize(H.p_theyre())] exposed!"))
 		else
 			H.changeNext_move(CLICK_CD_MELEE)
 		remove_status_effect(/datum/status_effect/buff/clash)
+		apply_status_effect(/datum/status_effect/buff/adrenaline_rush)
 		purge_peel(GUARD_PEEL_REDUCTION)
 
 //This is a gargantuan, clunky proc that is meant to tally stats and weapon properties for the potential disarm.
@@ -894,7 +835,7 @@
 		skilldiff = skilldiff - HU.get_skill_level(IU.associated_skill)
 	else
 		instantwin = TRUE	//THEY are Guarding with a book or something -- no chance for them.
-	
+
 	//Weapon checks.
 	var/lengthdiff = IM.wlength - IU.wlength //The longer the weapon the better.
 	var/wieldeddiff = IM.wielded - IU.wielded //If ours is wielded but theirs is not.
@@ -912,7 +853,7 @@
 			prob_us += 10
 		else if(statdiff <= -2)
 			prob_opp += 10
-	
+
 	for(var/wepdiff in wepdiffs)
 		if(wepdiff > 0)
 			prob_us += 10
@@ -924,7 +865,7 @@
 		prob_us += 10
 	else if(wildcard < 0 )
 		prob_opp += 10
-	
+
 	//Small bonus to the first one to strike in a Clash.
 	var/initiator_bonus = rand(5, 10)
 	prob_us += initiator_bonus
@@ -963,12 +904,12 @@
 			disarmed(IM)
 		if(instantwin)
 			HU.disarmed(IU)
-	
+
 	remove_status_effect(/datum/status_effect/buff/clash)
 	HU.remove_status_effect(/datum/status_effect/buff/clash)
 
 /mob/living/carbon/human/proc/disarmed(obj/item/I)
-	visible_message(span_suicide("[src] is disarmed!"), 
+	visible_message(span_suicide("[src] is disarmed!"),
 					span_boldwarning("I'm disarmed!"))
 	var/turnangle = (prob(50) ? 270 : 90)
 	var/turndir = turn(dir, turnangle)
@@ -1004,14 +945,14 @@
 	for(var/slot in slots)
 		if(isnull(slot) || !istype(slot, /obj/item/clothing))
 			slots.Remove(slot)
-	
+
 	var/highest_ac = ARMOR_CLASS_NONE
 
 	for(var/obj/item/clothing/C in slots)
 		if(C.armor_class)
 			if(C.armor_class > highest_ac)
 				highest_ac = C.armor_class
-	
+
 	return highest_ac
 
 /mob/living/carbon/human/proc/has_duelist_ring()
@@ -1034,12 +975,12 @@
 	var/min_target = min(HT.STASTR, HT.STACON, HT.STAEND, HT.STAINT, HT.STAPER, HT.STASPD)
 	var/max_user = min(max(STASTR, STACON, STAEND, STAINT, STAPER, STASPD), 14)
 	var/min_user = min(STASTR, STACON, STAEND, STAINT, STAPER, STASPD)
-	
+
 	if(max_target > max_user)
 		finalprob -= max_target
 	if(min_target > min_user)
 		finalprob -= 3 * min_target
-	
+
 	if(max_target < max_user)
 		finalprob += max_user
 	if(min_target < min_user)

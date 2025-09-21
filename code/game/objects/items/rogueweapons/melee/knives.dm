@@ -1,4 +1,4 @@
-//intent datums ฅ^•ﻌ•^ฅ 
+//intent datums ฅ^•ﻌ•^ฅ
 
 /datum/intent/dagger
 	clickcd = 8
@@ -33,7 +33,7 @@
 	icon_state = "inpick"
 	attack_verb = list("stabs", "impales")
 	hitsound = list('sound/combat/hits/bladed/genstab (1).ogg', 'sound/combat/hits/bladed/genstab (2).ogg', 'sound/combat/hits/bladed/genstab (3).ogg')
-	penfactor = 80
+	penfactor = 75
 	clickcd = 14
 	swingdelay = 12
 	damfactor = 1.1
@@ -80,6 +80,7 @@
 	name = "hunting knife"
 	desc = "A hunter's prized possession. Keep it sharp, and it might last you through the wild."
 	icon_state = "huntingknife"
+	sheathe_icon = "huntingknife"
 	icon = 'icons/roguetown/weapons/32.dmi'
 	item_state = "bone_dagger"
 	lefthand_file = 'icons/mob/inhands/weapons/swords_lefthand.dmi'
@@ -89,7 +90,7 @@
 	wlength = WLENGTH_SHORT
 	w_class = WEIGHT_CLASS_SMALL
 	parrysound = list('sound/combat/parry/bladed/bladedsmall (1).ogg','sound/combat/parry/bladed/bladedsmall (2).ogg','sound/combat/parry/bladed/bladedsmall (3).ogg')
-	max_blade_int = 100
+	max_blade_int = 200
 	max_integrity = 175
 	swingsound = list('sound/combat/wooshes/bladed/wooshsmall (1).ogg','sound/combat/wooshes/bladed/wooshsmall (2).ogg','sound/combat/wooshes/bladed/wooshsmall (3).ogg')
 	associated_skill = /datum/skill/combat/knives
@@ -101,16 +102,23 @@
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/iron
 
+	picklvl = 1
+
 	grid_height = 64
 	grid_width = 32
 	pickup_sound = 'modular_helmsguard/sound/sheath_sounds/draw_dagger.ogg'
 	sheathe_sound = 'modular_helmsguard/sound/sheath_sounds/put_back_dagger.ogg'
 
+	equip_delay_self = 2
+	unequip_delay_self = 2
+	inv_storage_delay = 2
+	edelay_type = 1
+
 	//flipping knives has a cooldown on to_chat to reduce chatspam
 	COOLDOWN_DECLARE(flip_cooldown)
 
 /obj/item/rogueweapon/huntingknife/Initialize()
-	. = ..()
+	..()
 	AddElement(/datum/element/tipped_item)
 	var/static/list/slapcraft_recipe_list = list(
 		/datum/crafting_recipe/roguetown/survival/peasantry/maciejowski_knife,
@@ -133,7 +141,7 @@
 /obj/item/rogueweapon/huntingknife/equipped(mob/user, slot, initial = FALSE)
 	pickup_sound = pick("modular_helmsguard/sound/sheath_sounds/draw_dagger.ogg", "modular_helmsguard/sound/sheath_sounds/draw_dagger2.ogg", "sound/foley/equip/swordsmall2.ogg")
 	. = ..()
-	
+
 /obj/item/rogueweapon/huntingknife/rmb_self(mob/user)
 	. = ..()
 	if(.)
@@ -188,6 +196,8 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	smeltresult = /obj/item/ingot/steel
 
+	picklvl = 0.8
+
 /obj/item/rogueweapon/huntingknife/cleaver/getonmobprop(tag)
 	. = ..()
 	if(tag)
@@ -232,6 +242,8 @@
 	w_class = WEIGHT_CLASS_SMALL
 	smeltresult = /obj/item/ingot/steel
 
+	picklvl = 0.9
+
 /obj/item/rogueweapon/huntingknife/combat
 	force = 16
 	name = "seax"
@@ -239,6 +251,7 @@
 	tool of daily life and as a capable fighting knife."
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/chop/cleaver, /datum/intent/dagger/sucker_punch,)
 	icon_state = "combatknife"
+	sheathe_icon = "combatknife"
 	icon = 'icons/roguetown/weapons/32.dmi'
 	parrysound = list('sound/combat/parry/bladed/bladedmedium (1).ogg','sound/combat/parry/bladed/bladedmedium (2).ogg','sound/combat/parry/bladed/bladedmedium (3).ogg')
 	swingsound = list('sound/combat/wooshes/bladed/wooshmed (1).ogg','sound/combat/wooshes/bladed/wooshmed (2).ogg','sound/combat/wooshes/bladed/wooshmed (3).ogg')
@@ -247,6 +260,8 @@
 	thrown_bclass = BCLASS_CHOP
 	w_class = WEIGHT_CLASS_NORMAL
 	smeltresult = /obj/item/ingot/steel
+
+	picklvl = 1.1
 
 /obj/item/rogueweapon/huntingknife/combat/getonmobprop(tag)
 	. = ..()
@@ -262,8 +277,10 @@
 	name = "iron dagger"
 	desc = "This is a common dagger of iron."
 	icon_state = "idagger"
+	sheathe_icon = "idagger"
 	smeltresult = /obj/item/ingot/iron
-	blade_dulling = DULLING_SHAFT_REINFORCED
+
+	picklvl = 1.1
 
 /obj/item/rogueweapon/huntingknife/idagger/adagger
 	name = "decrepit dagger"
@@ -271,8 +288,12 @@
 	force = 12
 	max_integrity = 75
 	icon_state = "adagger"
+	sheathe_icon = "adagger"
 	smeltresult = /obj/item/ingot/aalloy
 	blade_dulling = DULLING_SHAFT_CONJURED
+	randomize_blade_int_on_init = TRUE
+
+	picklvl = 0.95
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/padagger
 	name = "ancient dagger"
@@ -280,13 +301,18 @@
 	icon_state = "adagger"
 	smeltresult = /obj/item/ingot/aaslag
 
+	picklvl = 1
+
 /obj/item/rogueweapon/huntingknife/idagger/steel
 	name = "steel dagger"
 	desc = "This is a dagger made of solid steel, more durable."
 	icon_state = "sdagger"
+	sheathe_icon = "sdagger"
 	force = 20
 	max_integrity = 150
 	smeltresult = /obj/item/ingot/steel
+
+	picklvl = 1.15
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/holysee
 	name = "eclipsum dagger"
@@ -294,6 +320,10 @@
 	force = 25
 	max_integrity = 200
 	icon_state = "gsdagger"
+	sheathe_icon = "gsdagger"
+	is_silver = TRUE
+
+	picklvl = 1.2
 
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/pestrasickle
@@ -301,6 +331,8 @@
 	desc = "A wicked edge brings feculent delights."
 	icon_state = "pestrasickle"
 	max_integrity = 200
+
+	picklvl = 0.98
 
 /*
 	name = "facón"
@@ -311,9 +343,12 @@
 	name = "'De Tace'"
 	desc = "The right hand of the right hand, this narrow length of steel serves as a quick solution to petty greviences."
 	icon_state = "stiletto"
+	sheathe_icon = "stiletto"
 	force = 25
 	max_integrity = 200
 	smeltresult = /obj/item/ingot/steel
+
+	picklvl = 1.2
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/parrying //direct upgrade but more costly.
 	name = "steel parrying dagger"
@@ -321,7 +356,11 @@
 	force = 15
 	throwforce = 15
 	icon_state = "spdagger"
+	sheathe_icon = "spdagger"
 	wdefense = 6
+	max_integrity = 200
+
+	picklvl = 1.1
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/parrying/vaquero
 	name = "sail dagger"
@@ -331,28 +370,50 @@
 	throwforce = 17
 	icon_state = "sail_dagger"
 
+	picklvl = 1.11
+
 /obj/item/rogueweapon/huntingknife/idagger/steel/special
 	icon_state = "sdaggeralt"
+	sheathe_icon = "sdaggeralt"
+
+/obj/item/rogueweapon/huntingknife/idagger/steel/kazengun
+	name = "steel tanto"
+	desc = "A steel dagger imported from the Kazengunese archipelago. A sturdy blade bears a subtle curve, set into a decorated circular crossguard. A waxed \
+	wrapping of twisted cordage provides a secure grip."
+	icon_state = "eastdagger"
+	sheathe_icon = "tanto"
+
+	picklvl = 1.1
 
 /obj/item/rogueweapon/huntingknife/idagger/silver
 	name = "silver dagger"
 	desc = "This silver dagger can be the banishment of vampires and werewolves."
 	icon_state = "sildagger"
+	sheathe_icon = "sildagger"
 	sellprice = 50
 	smeltresult = /obj/item/ingot/silver
 	last_used = 0
 	is_silver = TRUE
 
+	picklvl = 1.11
+
 /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger
-	name = "blessed silver dagger"
-	desc = "An ornate dagger, plated in a ceremonial veneer of silver. The bane of vampyres and verevolves, in the hands of a faithful hunter."
+	name = "ornate dagger"
+	desc = "An ornate dagger, plated in a ceremonial veneer of silver. The bane of those cursed, in the hands of a faithful hunter. \
+	It is said that on induction into the Inquisitorial order, a new member of the martial arm is handed such a blade. A token, for their service."
 	icon_state = "psydagger"
+	sheathe_icon = "psydagger"
 	sellprice = 70
 
+	picklvl = 1.175
+
 /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger/ComponentInitialize()
-	. = ..()				//It's preblessed with silver only. Mostly redundant, but safely prevents double-blessing.
-	AddComponent(/datum/component/psyblessed, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE)
-	sellprice += 200
+	. = ..()					//+2 force, +50 int, +1 def, make silver
+	AddComponent(/datum/component/psyblessed, FALSE, 2, FALSE, 50, 1, TRUE)
+
+/obj/item/rogueweapon/huntingknife/idagger/silver/psydagger/preblessed/ComponentInitialize()
+	. = ..()					//Pre-blessed, +2 force, +50 int, +1 def, make silver
+	AddComponent(/datum/component/psyblessed, TRUE, 2, FALSE, 50, 1, TRUE)
 
 /obj/item/rogueweapon/huntingknife/idagger/silver/pickup(mob/user)
 	. = ..()
@@ -377,6 +438,12 @@
 			H.Paralyze(10)
 			H.adjustFireLoss(25)
 			H.fire_act(1,10)
+		if(HAS_TRAIT(H, TRAIT_HOLLOW_LIFE))
+			to_chat(H, span_userdanger("I can't pick up the silver, for I am one of the damned!"))
+			H.adjustFireLoss(25)
+			H.fire_act(1,10)
+			H.Knockdown(5)
+			H.Paralyze(5)
 
 
 /obj/item/rogueweapon/huntingknife/idagger/silver/mob_can_equip(mob/living/M, mob/living/equipper, slot, disable_warning = FALSE, bypass_equip_delay_self = FALSE)
@@ -404,7 +471,90 @@
 			H.Paralyze(10)
 			H.adjustFireLoss(25)
 			H.fire_act(1,10)
+		if(HAS_TRAIT(H, TRAIT_HOLLOW_LIFE))
+			to_chat(H, span_userdanger("I can't equip the silver, for I am one of the damned!"))
+			H.adjustFireLoss(25)
+			H.fire_act(1,10)
+			H.Knockdown(5)
+			H.Paralyze(5)
 
+/obj/item/weapon/knife/dagger/silver/arcyne
+	name = "glowing purple silver dagger"
+	desc = "This dagger glows a faint purple. Quicksilver runs across its blade."
+	var/is_bled = FALSE
+
+	picklvl = 0.95
+
+/obj/item/weapon/knife/dagger/silver/arcyne/Initialize()
+	. = ..()
+	filter(type="drop_shadow", x=0, y=0, size=2, offset=1, color=rgb(128, 0, 128, 1))
+
+/obj/item/weapon/knife/dagger/silver/attackby(obj/item/M, mob/user, params)
+	if(istype(M,/obj/item/rogueore/cinnabar))
+		var/crafttime = (60 - ((user.get_skill_level(/datum/skill/magic/arcane)) * 5))
+		if(do_after(user, crafttime, target = src))
+			playsound(loc, 'sound/magic/scrapeblade.ogg', 100, TRUE)
+			to_chat(user, span_notice("I press acryne magic into the blade and it throbs in a deep purple..."))
+			var/obj/arcyne_knife = new /obj/item/weapon/knife/dagger/silver/arcyne
+			qdel(M)
+			qdel(src)
+			user.put_in_active_hand(arcyne_knife)
+	else
+		return ..()
+
+/obj/item/weapon/knife/dagger/silver/arcyne/attack_self(mob/living/carbon/human/user)
+	if(!isarcyne(user))
+		return
+	var/obj/effect/decal/cleanable/roguerune/pickrune
+	var/runenameinput = input(user, "Runes", "All Runes") as null|anything in GLOB.t4rune_types
+	pickrune = GLOB.rune_types[runenameinput]
+	if(!pickrune)
+		return
+	var/turf/Turf = get_turf(user)
+	if(locate(/obj/effect/decal/cleanable/roguerune) in Turf)
+		to_chat(user, span_cult("There is already a rune here."))
+		return
+	var/structures_in_way = check_for_structures_and_closed_turfs(loc, pickrune)
+	if(structures_in_way == TRUE)
+		to_chat(user, span_cult("There is a structure, rune or wall in the way."))
+		return
+	var/chosen_keyword
+	if(pickrune.req_keyword)
+		chosen_keyword = stripped_input(user, "Keyword for the new rune", "Runes", max_length = MAX_NAME_LEN)
+		if(!chosen_keyword)
+			return FALSE
+	if(!is_bled)
+		playsound(loc, get_sfx("genslash"), 100, TRUE)
+		user.visible_message(span_warning("[user] cuts open [user.p_their()] palm!"), \
+			span_cult("I slice open my palm!"))
+		if(user.blood_volume)
+			user.apply_damage(pickrune.scribe_damage, BRUTE, pick(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM))
+		is_bled = TRUE
+	var/crafttime = (10 SECONDS - ((user.get_skill_level(/datum/skill/magic/arcane)) * 5))
+
+	user.visible_message(span_warning("[user] begins to carve something with [user.p_their()] blade!"), \
+		span_notice("I start to drag the blade in the shape of symbols and sigils."))
+	playsound(loc, 'sound/magic/bladescrape.ogg', 100, TRUE)
+	if(do_after(user, crafttime, target = src))
+		if(QDELETED(src) || !pickrune)
+			return
+		user.visible_message(span_warning("[user] carves an arcyne rune with [user.p_their()] [src]!"), \
+		span_notice("I finish dragging the blade in symbols and circles, leaving behind a [pickrune.name]."))
+		new pickrune(Turf, chosen_keyword)
+
+/obj/item/weapon/knife/dagger/proc/check_for_structures_and_closed_turfs(loc, obj/effect/decal/cleanable/roguerune/rune_to_scribe)
+	for(var/turf/T in range(loc, rune_to_scribe.runesize))
+		//check for /sturcture subtypes in the turf's contents
+		for(var/obj/structure/S in T.contents)
+			return TRUE		//Found a structure, no need to continue
+		//check if turf itself is a /turf/closed subtype
+		if(istype(T,/turf/closed))
+			return TRUE
+		//check if rune in the turfs contents
+		for(var/obj/effect/decal/cleanable/roguerune/R in T.contents)
+			return TRUE
+		//Return false if nothing in range was found
+	return FALSE
 
 /obj/item/rogueweapon/huntingknife/stoneknife
 	possible_item_intents = list(/datum/intent/dagger/cut,/datum/intent/dagger/chop)
@@ -413,18 +563,23 @@
 	icon_state = "stone_knife"
 	smeltresult = null
 	max_integrity = 50
-	max_blade_int = 50
+	max_blade_int = 100
 	wdefense = 1
 	resistance_flags = FLAMMABLE
+
+	picklvl = 0.8
 
 /obj/item/rogueweapon/huntingknife/idagger/silver/elvish
 	name = "elvish dagger"
 	desc = "This beautiful dagger is of intricate, elvish design. Sharper, too."
 	force = 22
+	max_blade_int = 250
 	icon_state = "elfdagger"
 	item_state = "elfdag"
 	last_used = 0
 	is_silver = TRUE
+
+	picklvl = 1.17
 
 /obj/item/rogueweapon/huntingknife/idagger/silver/elvish/drow
 	name = "drowish dagger"
@@ -432,6 +587,8 @@
 	force = 25
 	last_used = 0
 	is_silver = TRUE
+
+	picklvl = 1.1
 
 /obj/item/rogueweapon/huntingknife/idagger/navaja
 	possible_item_intents = list(/datum/intent/dagger/thrust,/datum/intent/dagger/cut,  /datum/intent/dagger/thrust/pick)
@@ -443,6 +600,8 @@
 	var/extended = 0
 	wdefense = 2
 	sellprice = 30 //shiny :o
+
+	picklvl = 0
 
 /obj/item/rogueweapon/huntingknife/idagger/navaja/attack_self(mob/user)
 	extended = !extended
@@ -456,6 +615,7 @@
 		attack_verb = list("slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 		sharpness = IS_SHARP
 		playsound(user, 'sound/items/knife_open.ogg', 100, TRUE)
+		picklvl = 1.12
 	else
 		force = 5
 		w_class = WEIGHT_CLASS_SMALL
@@ -482,6 +642,8 @@
 	sellprice = 1
 	thrown_damage_flag = "piercing"		//Checks piercing type like an arrow.
 
+	picklvl = 0.95
+
 /obj/item/rogueweapon/huntingknife/throwingknife/getonmobprop(tag)
 	. = ..()
 	if(tag)
@@ -491,12 +653,23 @@
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
+/obj/item/rogueweapon/huntingknife/throwingknife/kazengun
+	name = "eastern tossblade"
+	desc = "A four pointed throwing knife ground and sharpened from a single piece of metal. The design is intended to solve one of weaknesses of basic tossblades; \
+	more points means these are more likely to land point-first."
+	icon_state = "easttossblade"
+	throwforce = 30
+	max_integrity = 100
+	armor_penetration = 40
+	embedding = list("embedded_pain_multiplier" = 4, "embed_chance" = 60, "embedded_fall_chance" = 5)
+
 /obj/item/rogueweapon/huntingknife/throwingknife/aalloy
 	name = "decrepit tossblade"
 	desc = "A decrepit old tossblade. You ought to throw cutlery instead."
 	icon_state = "throw_knifea"
 	force = 7
 	throwforce = 16
+	randomize_blade_int_on_init = TRUE
 
 /obj/item/rogueweapon/huntingknife/throwingknife/steel
 	name = "steel tossblade"
@@ -534,6 +707,9 @@
 	name = "iron scissors"
 	desc = "Scissors made of iron that may be used to salvage usable materials from clothing."
 	icon_state = "iscissors"
+	inv_storage_delay = null
+
+	picklvl = 0.85
 
 /obj/item/rogueweapon/huntingknife/scissors/steel
 	force = 14
@@ -565,7 +741,7 @@
 			var/chosen = input(user, "What would you like to style?", "Hair Styling") as null|anything in options
 			if(!chosen)
 				return
-			
+
 			switch(chosen)
 				if("hairstyle")
 					var/datum/customizer_choice/bodypart_feature/hair/head/humanoid/hair_choice = CUSTOMIZER_CHOICE(/datum/customizer_choice/bodypart_feature/hair/head/humanoid)
@@ -573,25 +749,25 @@
 					for(var/hair_type in hair_choice.sprite_accessories)
 						var/datum/sprite_accessory/hair/head/hair = new hair_type()
 						valid_hairstyles[hair.name] = hair_type
-					
+
 					var/new_style = input(user, "Choose their hairstyle", "Hair Styling") as null|anything in valid_hairstyles
 					if(new_style)
 						user.visible_message(span_notice("[user] begins styling [H]'s hair..."), span_notice("You begin styling [H == user ? "your" : "[H]'s"] hair..."))
 						if(!do_after(user, 30 SECONDS, target = H))
 							to_chat(user, span_warning("The styling was interrupted!"))
 							return
-						
+
 						var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
 						if(head && head.bodypart_features)
 							var/datum/bodypart_feature/hair/head/current_hair = null
 							for(var/datum/bodypart_feature/hair/head/hair_feature in head.bodypart_features)
 								current_hair = hair_feature
 								break
-							
+
 							if(current_hair)
 								var/datum/customizer_entry/hair/hair_entry = new()
 								hair_entry.hair_color = current_hair.hair_color
-								
+
 								// Preserve gradients and their colors
 								if(istype(current_hair, /datum/bodypart_feature/hair/head))
 									hair_entry.natural_gradient = current_hair.natural_gradient
@@ -600,17 +776,17 @@
 										hair_entry.dye_gradient = current_hair.hair_dye_gradient
 									if(hasvar(current_hair, "hair_dye_color"))
 										hair_entry.dye_color = current_hair.hair_dye_color
-								
+
 								var/datum/bodypart_feature/hair/head/new_hair = new()
 								new_hair.set_accessory_type(valid_hairstyles[new_style], hair_entry.hair_color, H)
 								hair_choice.customize_feature(new_hair, H, null, hair_entry)
-								
+
 								head.remove_bodypart_feature(current_hair)
 								head.add_bodypart_feature(new_hair)
 								H.update_hair()
 								playsound(src, 'sound/items/flint.ogg', 50, TRUE)
 								user.visible_message(span_notice("[user] finishes styling [H]'s hair."), span_notice("You finish styling [H == user ? "your" : "[H]'s"] hair."))
-				
+
 				if("facial hairstyle")
 					if(H.gender != MALE)
 						to_chat(user, span_warning("They don't have facial hair to style!"))
@@ -620,30 +796,30 @@
 					for(var/facial_type in facial_choice.sprite_accessories)
 						var/datum/sprite_accessory/hair/facial/facial = new facial_type()
 						valid_facial_hairstyles[facial.name] = facial_type
-					
+
 					var/new_style = input(user, "Choose their facial hairstyle", "Hair Styling") as null|anything in valid_facial_hairstyles
 					if(new_style)
 						user.visible_message(span_notice("[user] begins styling [H]'s facial hair..."), span_notice("You begin styling [H == user ? "your" : "[H]'s"] facial hair..."))
 						if(!do_after(user, 60 SECONDS, target = H))
 							to_chat(user, span_warning("The styling was interrupted!"))
 							return
-						
+
 						var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
 						if(head && head.bodypart_features)
 							var/datum/bodypart_feature/hair/facial/current_facial = null
 							for(var/datum/bodypart_feature/hair/facial/facial_feature in head.bodypart_features)
 								current_facial = facial_feature
 								break
-							
+
 							if(current_facial)
 								var/datum/customizer_entry/hair/facial/facial_entry = new()
 								facial_entry.hair_color = current_facial.hair_color
 								facial_entry.accessory_type = current_facial.accessory_type
-								
+
 								var/datum/bodypart_feature/hair/facial/new_facial = new()
 								new_facial.set_accessory_type(valid_facial_hairstyles[new_style], facial_entry.hair_color, H)
 								facial_choice.customize_feature(new_facial, H, null, facial_entry)
-								
+
 								head.remove_bodypart_feature(current_facial)
 								head.add_bodypart_feature(new_facial)
 								H.update_hair()
@@ -658,7 +834,7 @@
 			var/chosen = input(user, "What would you like to style?", "Hair Styling") as null|anything in options
 			if(!chosen)
 				return
-			
+
 			switch(chosen)
 				if("hairstyle")
 					var/datum/customizer_choice/bodypart_feature/hair/head/humanoid/hair_choice = CUSTOMIZER_CHOICE(/datum/customizer_choice/bodypart_feature/hair/head/humanoid)
@@ -666,25 +842,25 @@
 					for(var/hair_type in hair_choice.sprite_accessories)
 						var/datum/sprite_accessory/hair/head/hair = new hair_type()
 						valid_hairstyles[hair.name] = hair_type
-					
+
 					var/new_style = input(user, "Choose their hairstyle", "Hair Styling") as null|anything in valid_hairstyles
 					if(new_style)
 						user.visible_message(span_notice("[user] begins styling [H]'s hair..."), span_notice("You begin styling [H == user ? "your" : "[H]'s"] hair..."))
 						if(!do_after(user, 60 SECONDS, target = H))
 							to_chat(user, span_warning("The styling was interrupted!"))
 							return
-						
+
 						var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
 						if(head && head.bodypart_features)
 							var/datum/bodypart_feature/hair/head/current_hair = null
 							for(var/datum/bodypart_feature/hair/head/hair_feature in head.bodypart_features)
 								current_hair = hair_feature
 								break
-							
+
 							if(current_hair)
 								var/datum/customizer_entry/hair/hair_entry = new()
 								hair_entry.hair_color = current_hair.hair_color
-								
+
 								// Preserve gradients and their colors
 								if(istype(current_hair, /datum/bodypart_feature/hair/head))
 									hair_entry.natural_gradient = current_hair.natural_gradient
@@ -693,17 +869,17 @@
 										hair_entry.dye_gradient = current_hair.hair_dye_gradient
 									if(hasvar(current_hair, "hair_dye_color"))
 										hair_entry.dye_color = current_hair.hair_dye_color
-								
+
 								var/datum/bodypart_feature/hair/head/new_hair = new()
 								new_hair.set_accessory_type(valid_hairstyles[new_style], hair_entry.hair_color, H)
 								hair_choice.customize_feature(new_hair, H, null, hair_entry)
-								
+
 								head.remove_bodypart_feature(current_hair)
 								head.add_bodypart_feature(new_hair)
 								H.update_hair()
 								playsound(src, 'sound/items/flint.ogg', 50, TRUE)
 								user.visible_message(span_notice("[user] finishes styling [H]'s hair."), span_notice("You finish styling [H == user ? "your" : "[H]'s"] hair."))
-				
+
 				if("facial hairstyle")
 					if(H.gender != MALE)
 						to_chat(user, span_warning("They don't have facial hair to style!"))
@@ -713,30 +889,30 @@
 					for(var/facial_type in facial_choice.sprite_accessories)
 						var/datum/sprite_accessory/hair/facial/facial = new facial_type()
 						valid_facial_hairstyles[facial.name] = facial_type
-					
+
 					var/new_style = input(user, "Choose their facial hairstyle", "Hair Styling") as null|anything in valid_facial_hairstyles
 					if(new_style)
 						user.visible_message(span_notice("[user] begins styling [H]'s facial hair..."), span_notice("You begin styling [H == user ? "your" : "[H]'s"] facial hair..."))
 						if(!do_after(user, 60 SECONDS, target = H))
 							to_chat(user, span_warning("The styling was interrupted!"))
 							return
-						
+
 						var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
 						if(head && head.bodypart_features)
 							var/datum/bodypart_feature/hair/facial/current_facial = null
 							for(var/datum/bodypart_feature/hair/facial/facial_feature in head.bodypart_features)
 								current_facial = facial_feature
 								break
-							
+
 							if(current_facial)
 								var/datum/customizer_entry/hair/facial/facial_entry = new()
 								facial_entry.hair_color = current_facial.hair_color
 								facial_entry.accessory_type = current_facial.accessory_type
-								
+
 								var/datum/bodypart_feature/hair/facial/new_facial = new()
 								new_facial.set_accessory_type(valid_facial_hairstyles[new_style], facial_entry.hair_color, H)
 								facial_choice.customize_feature(new_facial, H, null, facial_entry)
-								
+
 								head.remove_bodypart_feature(current_facial)
 								head.add_bodypart_feature(new_facial)
 								H.update_hair()
@@ -753,7 +929,7 @@
 			salvage_time = (70 - ((user.get_skill_level(/datum/skill/misc/sewing)) * 10))
 			if(!do_after(user, salvage_time, target = user))
 				return
-			
+
 			if(item.fiber_salvage) //We're getting fiber as base if fiber is present on the item
 				new /obj/item/natural/fibers(get_turf(item))
 			if(istype(item, /obj/item/storage))
@@ -775,3 +951,33 @@
 			qdel(item)
 			user.mind.add_sleep_experience(/datum/skill/misc/sewing, (user.STAINT))
 	return ..()
+
+/obj/item/rogueweapon/huntingknife/attack(mob/living/M, mob/living/user)
+	if(user == M && user.used_intent && user.used_intent.blade_class == BCLASS_STAB && istype(user.rmb_intent, /datum/rmb_intent/weak))
+		if(user.zone_selected == BODY_ZONE_PRECISE_STOMACH || user.zone_selected == BODY_ZONE_CHEST)
+			if(user.doing)
+				to_chat(user, span_warning("You're already in the process of disemboweling yourself!"))
+				return
+			user.visible_message(span_danger("[user] presses [src] to their stomach, preparing to disembowel themselves!"), span_notice("You press the blade to your stomach and begin to push..."))
+			if(!do_after(user, 40, 1, user, 1)) // 4 seconds, hand required, target self, show progress
+				to_chat(user, span_warning("You stop before you can disembowel yourself!"))
+				return
+			// Disembowelment success: drop organs
+			var/list/spilled_organs = list()
+			var/obj/item/organ/stomach/stomach = user.getorganslot(ORGAN_SLOT_STOMACH)
+			if(stomach)
+				spilled_organs += stomach
+			var/obj/item/organ/liver/liver = user.getorganslot(ORGAN_SLOT_LIVER)
+			if(liver)
+				spilled_organs += liver
+			var/obj/item/organ/heart/heart = user.getorganslot(ORGAN_SLOT_HEART)
+			if(heart)
+				spilled_organs += heart
+			for(var/obj/item/organ/spilled as anything in spilled_organs)
+				spilled.Remove(user)
+				spilled.forceMove(user.drop_location())
+			user.visible_message(span_danger("[user] disembowels themselves, their organs spilling out!"), span_notice("You feel a horrible pain as your organs spill out!"))
+			user.emote("scream", null, null, TRUE, TRUE) // forced scream
+			user.overlay_fullscreen("painflash", /atom/movable/screen/fullscreen/painflash)
+			return
+	..()

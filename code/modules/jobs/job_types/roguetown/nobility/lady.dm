@@ -7,8 +7,7 @@
 	spawn_positions = 0
 
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = RACES_TOLERATED_UP
-	allowed_patrons = NON_PSYDON_PATRONS
+	allowed_races = RACES_NOBILITY_ELIGIBLE_UP
 	tutorial = "Picked out of your political value rather than likely any form of love, you have become the Grand Duke's most trusted confidant--and likely friend--throughout your marriage. Your loyalty and perhaps even your love will be tested this day... for the daggers that threaten your beloved are as equally pointed at your own throat."
 
 	spells = list(/obj/effect/proc_holder/spell/self/convertrole/servant,
@@ -47,7 +46,6 @@
 		belt = /obj/item/storage/belt/rogue/leather/cloth/lady
 		head = /obj/item/clothing/head/roguetown/nyle/consortcrown
 		shirt = /obj/item/clothing/suit/roguetown/armor/armordress/winterdress/monarch
-		pants = /obj/item/clothing/under/roguetown/tights/stockings/silk/random
 		id = /obj/item/scomstone/garrison
 		shoes = /obj/item/clothing/shoes/roguetown/shortboots
 	else if(should_wear_masc_clothes(H))

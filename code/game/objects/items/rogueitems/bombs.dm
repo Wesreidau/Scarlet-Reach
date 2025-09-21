@@ -67,7 +67,7 @@
 				snuff()
 			else
 				playsound(T, 'sound/items/firesnuff.ogg', 100)
-				new /obj/item/natural/glass/shard (T)
+				new /obj/item/natural/glass_shard (T)
 	qdel(src)
 
 /obj/item/bomb/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
@@ -90,7 +90,7 @@
 	slot_flags = ITEM_SLOT_HIP
 	throw_speed = 0.5
 	grid_width = 32
-	grid_height = 64
+	grid_height = 32
 
 /obj/item/smokebomb/attack_self(mob/user)
     ..()

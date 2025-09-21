@@ -195,11 +195,6 @@
 	/obj/item/reagent_containers/glass/bottle/alchemical,/obj/item/reagent_containers/glass/bottle/alchemical,/obj/item/reagent_containers/glass/bottle/alchemical,
 	/obj/item/reagent_containers/glass/bottle/alchemical,/obj/item/reagent_containers/glass/bottle/alchemical,/obj/item/reagent_containers/glass/bottle/alchemical)
 	
-/datum/supply_pack/rogue/tools/gwstrap
-	name = "Greatweapon Strap"
-	cost = 30
-	contains = list(/obj/item/gwstrap)
-
 /datum/supply_pack/rogue/tools/headhook
 	name = "Iron Head Hook"
 	cost = 10
@@ -219,3 +214,13 @@
 	name = "Shovel"
 	cost = 20
 	contains = list(/obj/item/rogueweapon/shovel)
+
+/datum/supply_pack/rogue/tools/surgeon_bag
+	name = "Surgeon's Bag, Full"
+	cost = 80
+	contains = list(/obj/item/storage/belt/rogue/surgery_bag)
+
+/datum/supply_pack/rogue/tools/golem_upgrades
+	name = "Golem Skill Exhibitor"
+	cost = 35
+	contains = list(/obj/item/golem_skill_core)

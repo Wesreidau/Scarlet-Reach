@@ -104,11 +104,6 @@
 	cost = 20
 	contains = list(/obj/item/bomb)
 
-/datum/supply_pack/rogue/Sawbones/poison
-	name = "High-Potency poison"
-	cost = 100
-	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/poison)
-
 /datum/supply_pack/rogue/Sawbones/trustworthyhat
 	name = "Trustworthy Hat"
 	cost = 5
@@ -193,4 +188,9 @@
 	name = "Poison Antidote"
 	cost = 10
 	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/strong_antidote)
+
+/datum/supply_pack/rogue/Sawbones/emberwine
+	name = "Emberwine"
+	cost = 100
+	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/emberwine)
 	

@@ -116,7 +116,7 @@
 				if(grab.sublimb_grabbed == location)
 					return TRUE
 		for(var/obj/item/equipped_item in carbon_victim.get_equipped_items(include_pockets = FALSE, include_beltslots = FALSE))
-			if(zone2covered(location, equipped_item.body_parts_covered))
+			if(equipped_item.surgery_cover && zone2covered(location, equipped_item.body_parts_covered))
 				return FALSE
 		if(ishuman(carbon_victim))
 			var/mob/living/carbon/human/human_victim = carbon_victim
@@ -173,6 +173,9 @@
 				return TRUE
 		if(BODY_ZONE_R_LEG)
 			if(covered_locations & LEG_RIGHT)
+				return TRUE
+		if(BODY_ZONE_LAMIAN_TAIL)
+			if(covered_locations & TAIL_LAMIA)
 				return TRUE
 		if(BODY_ZONE_PRECISE_L_HAND)
 			if(covered_locations & HAND_LEFT)

@@ -139,6 +139,10 @@
 	name = "Dog, Long"
 	icon_state = "lab"
 
+/datum/sprite_accessory/ears/broad
+	name = "Broad"
+	icon_state = "broad"
+
 /datum/sprite_accessory/ears/murid
 	name = "Murid"
 	icon_state = "murid"
@@ -163,6 +167,12 @@
 	color_keys = 3
 	color_key_names = list("Ears", "Inner", "Tips")
 	relevant_layers = list(BODY_ADJ_LAYER)
+
+/datum/sprite_accessory/ears/bunny_long
+	name = "Bunny (Long)"
+	icon_state = "bunnylong"
+	color_keys = 2
+	color_key_names = list("Ears", "Tips")
 
 /datum/sprite_accessory/ears/pede
 	name = "Scolipede"
@@ -358,3 +368,17 @@
 	color_keys = 3
 	color_key_names = list("Ears", "Inner", "Tips")
 	relevant_layers = list(BODY_BEHIND_LAYER, BODY_FRONT_LAYER, BODY_ADJ_LAYER)
+
+///CONSTRUCT-GOLEM ACCESORIES, MADE OF METAL///
+/datum/sprite_accessory/ears/dendorite
+	name = "Dendorite Construct"
+	icon_state = "dendorite"
+
+/datum/sprite_accessory/ears/eoran
+	name = "Eoran Construct"
+	icon_state = "eoran"
+
+/datum/sprite_accessory/ears/pestran
+	name = "Pestran Construct"
+	icon_state = "pestran"
+

@@ -123,6 +123,8 @@
 		/datum/mob_descriptor/stature/patriarch,
 		/datum/mob_descriptor/stature/villain,
 		/datum/mob_descriptor/stature/thug,
+		/datum/mob_descriptor/stature/knave,
+		/datum/mob_descriptor/stature/wench,
 		/datum/mob_descriptor/stature/snob,
 		/datum/mob_descriptor/stature/slob,
 		/datum/mob_descriptor/stature/brute,
@@ -142,6 +144,16 @@
 		/datum/mob_descriptor/stature/bookworm,
 		/datum/mob_descriptor/stature/lowlife,
 		/datum/mob_descriptor/stature/dignitary,
+		/datum/mob_descriptor/stature/degenerate,
+		/datum/mob_descriptor/stature/zealot,
+		/datum/mob_descriptor/stature/churl,
+		/datum/mob_descriptor/stature/archon,
+		/datum/mob_descriptor/stature/vizier,
+		/datum/mob_descriptor/stature/blaggard,
+		/datum/mob_descriptor/stature/creep,
+		/datum/mob_descriptor/stature/freek,
+		/datum/mob_descriptor/stature/weerdoe,
+		/datum/mob_descriptor/stature/creacher,
 	)
 
 /datum/descriptor_choice/voice
@@ -297,6 +309,30 @@
 		/datum/mob_descriptor/feathers/frayed,
 		/datum/mob_descriptor/feathers/delicate,
 		/datum/mob_descriptor/feathers/soft,
+	)
+
+/datum/descriptor_choice/skin_lamia
+	name = "Skin & Scales"
+	default_descriptor = /datum/mob_descriptor/fur/plain
+	descriptors = list(
+		/datum/mob_descriptor/skin/normal,
+		/datum/mob_descriptor/skin/soft,
+		/datum/mob_descriptor/skin/rugged,
+		/datum/mob_descriptor/skin/diseased,
+		/datum/mob_descriptor/skin/dry,
+		/datum/mob_descriptor/skin/fine,
+		/datum/mob_descriptor/skin/wrinkled,
+		/datum/mob_descriptor/skin/sunkissed,
+		/datum/mob_descriptor/skin/aged,
+		/datum/mob_descriptor/skin/pockmarked,
+		/datum/mob_descriptor/skin/dusky,
+		/datum/mob_descriptor/skin/irritated,
+		/datum/mob_descriptor/skin/ashen,
+		/datum/mob_descriptor/scales/plain,
+		/datum/mob_descriptor/scales/rough,
+		/datum/mob_descriptor/scales/smooth,
+		/datum/mob_descriptor/scales/plated,
+		/datum/mob_descriptor/scales/peeling,
 	)
 
 #define PROMINENT_DESCRIPTORS \

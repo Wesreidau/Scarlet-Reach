@@ -4,7 +4,12 @@
 /datum/species/anthromorphsmall
 	name = "Verminvolk"
 	id = "anthromorphsmall"
-	desc = "A race akin to wild-kin, except afflicted with significantly smaller stature. A bit less respected than their kin due to their closer resemblance to vermin, like the dichotomy between Kobold and Sissean.<br>\
+	desc = "<b>Verminvolk</b><br>\
+	Verminfolk (also simply called 'vermin') are diminutive creachures, with their origins tracing back to the east. \
+	Though most commonly marsupial, they come in all shapes, but not necessarily all sizes. A penchant for crime is \
+	not uncommon amongst Verminfolk, with many finding work as cutpurses or assassins; naturally agile forms working \
+	in their favor. In recent years, Verminfolk have spread to all corners of the world -- though much to society's \
+	dismay, for their negative reputation is one which they have difficulty parting with. <br> \
 	(+1 Speed)"
 	default_color = "444"
 	species_traits = list(
@@ -66,6 +71,7 @@
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
 		/datum/customizer/bodypart_feature/underwear,
+		/datum/customizer/bodypart_feature/legwear,
 		/datum/customizer/organ/tail/anthro,
 		/datum/customizer/organ/tail_feature/anthro,
 		/datum/customizer/organ/snout/anthrosmall,

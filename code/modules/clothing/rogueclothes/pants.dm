@@ -2,7 +2,7 @@
 	slot_flags = ITEM_SLOT_PANTS
 	fitted = NO_FEMALE_UNIFORM
 	can_adjust = FALSE
-	body_parts_covered = GROIN|LEGS
+	body_parts_covered = GROIN|LEGS|TAIL_LAMIA
 	icon = 'icons/roguetown/clothing/pants.dmi'
 	mob_overlay_icon = 'icons/roguetown/clothing/onmob/pants.dmi'
 	equip_sound = 'sound/blank.ogg'
@@ -19,6 +19,8 @@
 	l_sleeve_status = SLEEVE_NORMAL
 	flags_inv = HIDECROTCH
 	experimental_inhand = FALSE
+	grid_height = 32
+	grid_width = 64
 
 /obj/item/clothing/under/roguetown/AdjustClothes(mob/user)
 #ifdef MATURESERVER
@@ -154,7 +156,6 @@
 	name = "otavan leather trousers"
 	desc = "padded leather armor made by Otavan tailors, its quality is remarkable."
 	icon_state = "fencerpants"
-	allowed_race = NON_DWARVEN_RACE_TYPES
 
 /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan/generic
 	name = "fencing breeches"
@@ -164,6 +165,7 @@
 	detail_tag = "_detail"
 	color = "#FFFFFF"
 	detail_color = "#3b2b29"
+	allowed_race = NON_DWARVEN_RACE_TYPES
 
 /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan/generic/update_icon()
 	cut_overlays()
@@ -292,6 +294,7 @@
 	resistance_flags = FIRE_PROOF
 	armor_class = ARMOR_CLASS_MEDIUM
 
+
 /obj/item/clothing/under/roguetown/chainlegs/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/item_equipped_movement_rustle)
@@ -314,6 +317,8 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	resistance_flags = FIRE_PROOF
 	sewrepair = FALSE
+	grid_height = 64
+	grid_width = 64
 
 /obj/item/clothing/under/roguetown/splintlegs/Initialize(mapload)
 	. = ..()
@@ -366,6 +371,8 @@
 	smelt_bar_num = 2
 	resistance_flags = FIRE_PROOF
 	armor_class = ARMOR_CLASS_HEAVY
+	grid_height = 64
+	grid_width = 64
 
 /obj/item/clothing/under/roguetown/platelegs/Initialize(mapload)
 	. = ..()
@@ -446,8 +453,10 @@
 	desc = "A knee-length mail skirt, warding cuts against the thighs without slowing the feet."
 	icon_state = "chain_skirt"
 	item_state = "chain_skirt"
-	body_parts_covered = LEGS
+	body_parts_covered = LEGS|TAIL_LAMIA
 	armor_class = ARMOR_CLASS_LIGHT	// Coverage to class trade.
+	grid_height = 32
+	grid_width = 64
 
 /obj/item/clothing/under/roguetown/platelegs/skirt
 	name = "steel plate tassets"
@@ -455,8 +464,10 @@
 	gender = PLURAL
 	icon_state = "plate_skirt"
 	item_state = "plate_skirt"
-	body_parts_covered = LEGS
+	body_parts_covered = LEGS|TAIL_LAMIA
 	armor_class = ARMOR_CLASS_MEDIUM // Coverage to class trade.
+	grid_height = 64
+	grid_width = 64
 
 /obj/item/clothing/under/roguetown/loincloth
 	name = "loincloth"
@@ -466,6 +477,8 @@
 //	adjustable = CAN_CADJUST
 	r_sleeve_status = SLEEVE_NOMOD
 	l_sleeve_status = SLEEVE_NOMOD
+	grid_height = 32
+	grid_width = 32
 
 /obj/item/clothing/under/roguetown/loincloth/brown
 	color = CLOTHING_BROWN
@@ -481,6 +494,8 @@
 	sleevetype = "chainkilt"
 	sleeved = 'icons/roguetown/clothing/onmob/helpers/sleeves_pants.dmi'
 	alternate_worn_layer = (SHOESLEEVE_LAYER-1)
+	grid_height = 32
+	grid_width = 64
 
 /obj/item/clothing/under/roguetown/chainlegs/kilt/aalloy
 	name = "decrepit chain kilt"
@@ -525,7 +540,8 @@
 	anvilrepair = /datum/skill/craft/armorsmithing
 	smeltresult = /obj/item/ingot/blacksteel
 	smelt_bar_num = 2
-
+	grid_height = 64
+	grid_width = 64
 
 /obj/item/clothing/under/roguetown/platelegs/blacksteel
 	name = "ancient blacksteel plate chausses"
@@ -558,7 +574,11 @@
 	desc = "A handmade pair of baggy, thin leather pants. Keeps sand out of your boots, sun off your legs, and a creacher's fangs from piercing your ankles."
 	naledicolor = FALSE
 
-/obj/item/clothing/under/roguetown/trou/eastpants1
+/obj/item/clothing/under/roguetown/trou/leather/eastern
+	icon_state = "eastpants1"
+	allowed_race = NON_DWARVEN_RACE_TYPES
+
+/obj/item/clothing/under/roguetown/heavy_leather_pants/eastpants1
 	name = "cut-throat's pants"
 	desc = "Foreign pants, with leather insewns."
 	icon_state = "eastpants1"
@@ -569,13 +589,49 @@
 	allowed_race = NON_DWARVEN_RACE_TYPES
 	flags_inv = HIDECROTCH
 
-/obj/item/clothing/under/roguetown/trou/eastpants2
+/obj/item/clothing/under/roguetown/heavy_leather_pants/eastpants1/light
+	name = "cut-throat's pants"
+	desc = "Foreign pants worn by those from the Kazengun region."
+	armor = ARMOR_PADDED_BAD
+
+/obj/item/clothing/under/roguetown/heavy_leather_pants/eastpants2
 	name = "strange ripped pants"
 	desc = "Weird pants typically worn by the destitute in Kazengun. Or, those looking to make a fashion statement."
 	icon_state = "eastpants2"
 	sleeved = 'icons/roguetown/clothing/onmob/helpers/sleeves_pants.dmi'
-	max_integrity = 130
 	armor = list("blunt" = 50, "slash" = 90, "stab" = 60, "piercing" = 30, "fire" = 0, "acid" = 0)
 	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_BLUNT)
 	allowed_race = NON_DWARVEN_RACE_TYPES
 	flags_inv = HIDECROTCH
+
+// new knight captain drip
+/obj/item/clothing/under/roguetown/platelegs/captain
+	name = "captain's chausses"
+	desc = "Cuisses made of plated steel, offering additional protection against blunt force. These are specially fitted for the captain."
+	icon_state = "capplateleg"
+	item_state = "capplateleg"
+	icon = 'icons/roguetown/clothing/special/captain.dmi'
+	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/captain.dmi'
+
+/obj/item/clothing/under/roguetown/carapacelegs
+	name = "carapace chausses"
+	desc = "Aquatic plated armor to protect the legs."
+	gender = PLURAL
+	icon_state = "carapace_legs"
+	item_state = "carapace_legs"
+	smeltresult = /obj/item/ash
+	sewrepair = TRUE
+	anvilrepair = null
+	armor = list("blunt" = 70, "slash" = 60, "stab" = 50, "piercing" = 30, "fire" = 30, "acid" = 0) //Around Hardened leather
+	max_integrity = 225
+	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_CHOP, BCLASS_BLUNT)
+	blocksound = PLATEHIT
+	var/do_sound = FALSE
+	drop_sound = 'sound/foley/dropsound/chain_drop.ogg'
+	r_sleeve_status = SLEEVE_NOMOD
+	l_sleeve_status = SLEEVE_NOMOD
+
+/obj/item/clothing/under/roguetown/carapacelegs/skirt
+	name = "carapace plated skirt"
+	icon_state = "carapace_skirt"
+	item_state = "carapace_skirt"

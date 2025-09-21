@@ -39,6 +39,11 @@ body {
   src: url('elf.ttf'); 
 }
 
+@font-face {
+  font-family: "Project Sans";
+  src: url('orator.ttf');
+}
+
 @font-face { 
   font-family: "MasonAlternate"; 
   src: url('dwarf.ttf'); 
@@ -50,8 +55,8 @@ body {
 }
 
 @font-face {
-  font-family: "Ramadhan Karim";
-  src: url('algaib.ttf');
+  font-family: "Persian";
+  src: url('algaib.otf');
 }
 
 @font-face { 
@@ -83,10 +88,20 @@ body {
   font-family: "Yuji Boku";
   src: url('kazengunese.ttf');
 }
+
+@font-face {
+  font-family: "Asiana";
+  src: url('kazengunaccent.ttf');
+}
  
 @font-face { 
   font-family: "Notredame"; 
   src: url('otavan.ttf'); 
+}
+
+@font-face { 
+  font-family: "Parisish"; 
+  src: url('posh.ttf'); 
 }
 
 @font-face { 
@@ -449,7 +464,8 @@ h1.alert, h2.alert	{color: #c9c1ba;font-family: Pterra, TrueType;}
 .papyrus				{font-family: "Papyrus", cursive, sans-serif;}
 .robot					{font-family: "Courier New", cursive, sans-serif;}
 
-.sandwauk 				{font-family: "Ramadhan Karim", "Pterra"; font-size: 150%;}
+.orator					{font-family: "Project Sans", "Pterra"; font-size: 100%;}
+.sandwauk 				{font-family: "Persian", "Pterra"; font-size: 140%; letter-spacing: 2px;}
 .human 					{font-family: "Honoka Mincho", "Pterra";}
 .elf					{font-family: "Dauphin", cursive, "Pterra";}
 .dwarf 					{font-family: "MasonAlternate", "Pterra";} 
@@ -462,10 +478,12 @@ h1.alert, h2.alert	{color: #c9c1ba;font-family: Pterra, TrueType;}
 .reptile				{font-family: "Kingthings Petrock", Pterra; font-size: 120%;}
 .grenzelhoftian			{font-family: "Emperialisme", "Pterra"; font-size: 120%;}
 .kazengunese			{font-family: "Yuji Boku", Pterra;}
+.kazenaccent			{font-family: "Asiana", "Pterra"; font-size: 100%;}
 .orc					{font-family: "Thief by The Riddler", "Pterra";}
 .beast					{font-family: "Thief by The Riddler", "Pterra";}
 .reptile				{font-family: "Kingthings Petrock", "Pterra"; font-size: 120%;}
 .otavan					{font-family: "Notredame", "Pterra"; font-size: 200%;}
+.posh					{font-family: "Parisish", "Pterra"; font-size: 130%;}
 .etruscan				{font-family: "Feronia", "Pterra"; font-size: 100%;}
 .gronnic				{font-family: "Jorvik Informal", "Pterra"; font-size: 100%;}
 .aavnic					{font-family: "Romeodn", "Pterra"; font-size: 100%;}
@@ -511,7 +529,7 @@ h1.alert, h2.alert	{color: #c9c1ba;font-family: Pterra, TrueType;}
 .love_mid					{color: #e9a8d1;	font-size: 75%;}
 .love_high					{color: #f05ee1;	font-size: 75%;}
 .love_extreme					{color: #d146f5;	font-size: 75%;}
-.aphrodisiac					{color: #d146f5;	font-size: 125%;}
+.aphrodisiac					{color: #d146f5;	font-size: 125%;} /* TODO - CHANGE THIS TO THE DESIRED COLOR!!!! */
 /*
 @keyframes hypnocolor {
 	0%		{color: #202020;}

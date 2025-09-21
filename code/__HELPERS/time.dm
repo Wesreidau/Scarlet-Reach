@@ -52,7 +52,7 @@ GLOBAL_VAR_INIT(dayspassed, FALSE)
 				if("dawn")
 					if(prob(25))
 						GLOB.forecast = "rain"
-				if("dae")
+				if("day")
 					if(prob(5))
 						GLOB.forecast = "rain"
 				if("dusk")
@@ -137,6 +137,23 @@ GLOBAL_VAR_INIT(dayspassed, FALSE)
 		addtimer(CALLBACK(src, PROC_REF(clear_area_text), T), 35)
 		var/time_change_tips_random = pick(GLOB.time_change_tips)
 		to_chat(client, span_notice("<b>[time_change_tips_random]</b>"))
+
+		if(mind.current.construct)//hackslop so golems can do their daily stuff without sleeping
+			if(mind.has_changed_spell)
+				mind.has_changed_spell = FALSE
+				to_chat(mind.current, span_smallnotice("I feel like I can change my spells again."))
+			if(mind.has_rituos)
+				mind.has_rituos = FALSE
+				to_chat(mind.current, span_smallnotice("The toil of invoking Her Lesser Work has fled my feeble form. I can continue my transfiguration..."))
+			if (mind.rituos_spell)
+				to_chat(mind.current, span_warning("My glimpse of [mind.rituos_spell.name] flees my mind as the new dae dawns..."))
+				mind.RemoveSpell(mind.rituos_spell)
+				mind.rituos_spell = null
+			if(HAS_TRAIT(mind.current, TRAIT_STUDENT))//golems can learn, too!
+				REMOVE_TRAIT(mind.current, TRAIT_STUDENT, TRAIT_GENERIC)
+				to_chat(mind.current, span_nicegreen("I feel that I can be educated in a skill once more."))
+
+
 	else if(GLOB.tod == "day")
 		playsound_local(src, 'sound/misc/midday.ogg', 100, FALSE)
 	else if(GLOB.tod == "night")
@@ -220,3 +237,7 @@ GLOBAL_VAR_INIT(rollovercheck_last_timeofday, 0)
 
 //returns time diff of two times normalized to time_rate_multiplier
 /proc/daytimeDiff(timeA, timeB)
+
+	//if the time is less than station time, add 24 hours (MIDNIGHT_ROLLOVER)
+	var/time_diff = timeA > timeB ? (timeB + 24 HOURS) - timeA : timeB - timeA
+	return time_diff / SSticker.station_time_rate_multiplier // normalise with the time rate multiplier

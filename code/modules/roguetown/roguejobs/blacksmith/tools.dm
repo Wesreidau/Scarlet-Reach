@@ -15,6 +15,7 @@
 	smeltresult = /obj/item/ash
 	grid_width = 32
 	grid_height = 64
+	var/quality = 1
 
 /obj/item/rogueweapon/hammer/attack_obj(obj/attacked_object, mob/living/user)
 	if(!isliving(user) || !user.mind)
@@ -59,7 +60,10 @@
 			return
 		else
 			user.visible_message(span_warning("[user] fumbles trying to repair [attacked_prosthetic]!"))
+			if(do_after(user, CLICK_CD_MELEE, target = attacked_object))
+				attack_obj(attacked_object, user)
 			return
+
 
 	if(isitem(attacked_object) && !user.cmode)
 		var/obj/item/attacked_item = attacked_object
@@ -104,7 +108,8 @@
 			return
 		else
 			user.visible_message(span_warning("[user] fumbles trying to repair [attacked_item]!"))
-			attacked_item.obj_integrity = max(0, attacked_item.obj_integrity - (10 - repair_percent))
+			if(do_after(user, CLICK_CD_MELEE, target = attacked_object))
+				attack_obj(attacked_object, user)
 			return
 
 	if(isstructure(attacked_object) && !user.cmode)
@@ -120,10 +125,18 @@
 		blacksmith.mind.add_sleep_experience(attacked_structure.hammer_repair, exp_gained) //We gain as much exp as we fix
 		playsound(src,'sound/items/bsmithfail.ogg', 100, FALSE)
 		user.visible_message(span_info("[user] repairs [attacked_structure]!"))
+		if(attacked_object.obj_integrity <= attacked_object.max_integrity && do_after(user, CLICK_CD_MELEE, target = attacked_object))
+			attack_obj(attacked_object, user)
 		return
 
 	. = ..()
 
+/obj/item/rogueweapon/hammer/attack_hand(mob/living/user)
+	if(HAS_TRAIT(user, TRAIT_CURSE_MALUM))
+		to_chat(user, span_warning("Your cursed hands burn at the touch of the hammer!"))
+		user.freak_out()
+		return
+	. = ..()
 
 /obj/item/rogueweapon/hammer/attack(mob/living/M, mob/user)
 	testing("attack")
@@ -142,25 +155,40 @@
 		var/obj/item/bodypart/affecting = H.get_bodypart(check_zone(user.zone_selected))
 		if(!affecting)
 			return
-		var/used_time = 70
-		if(user.mind)
-			used_time -= (user.get_skill_level(/datum/skill/craft/engineering) * 10)
-		playsound(loc, 'sound/items/bsmith1.ogg', 100, FALSE)
-		if(!do_mob(user, M, used_time))
-			return
-		playsound(loc, 'sound/items/bsmith4.ogg', 100, FALSE)
 
-		var/list/wCount = H.get_wounds()
-		H.adjustBruteLoss(-10)
-		H.adjustFireLoss(-10)
-		H.update_damage_overlays()
-		if(wCount.len > 0)
-			H.heal_wounds(2)
+		while(affecting.get_damage() != 0 || length(affecting.wounds))
+			var/used_time = 70
+			if(M == user)
+				to_chat(user, span_warning("Repairing myself is difficult..."))
+				used_time += 30 //repairing yourself as a golem is logistically going to be a lot more difficult than someone else doing it for you
+			if(user.mind)
+				used_time -= (user.get_skill_level(/datum/skill/craft/engineering) * 10)
+			playsound(loc, 'sound/items/bsmith1.ogg', 100, FALSE)
+			if(!do_mob(user, M, used_time))
+				return
+			playsound(loc, 'sound/items/bsmith4.ogg', 100, FALSE)
+
+			var/brute_heal = (affecting.brute_dam / 2)+5 //scale golem healing based on how much damage the limb has so we're not hammering a super damaged golem for years but also not fully healing them in 7 seconds
+			var/burn_heal = (affecting.burn_dam / 2)+5 //also keep in mind that this is healing one body part's damage, rather than the entire body's damage at once
+			affecting.heal_damage(brute_heal, burn_heal)
+
+			if(affecting.brute_dam == 0 && affecting.burn_dam == 0)
+				affecting.heal_wounds(20)//heal wounds twice as fast if there's no other damage to patch up
+			else
+				affecting.heal_wounds(10)
+
 			H.update_damage_overlays()
-		if(M == user)
-			user.visible_message(span_notice("[user] hammers [user.p_their()] [affecting]."), span_notice("I hammer my [affecting]."))
-		else
-			user.visible_message(span_notice("[user] hammers [M]'s [affecting]."), span_notice("I hammer [M]'s [affecting]."))
+
+			if(M == user)
+				user.visible_message(span_notice("[user] hammers [user.p_their()] [affecting.name]."), span_notice("I hammer my [affecting.name]."))
+			else
+				user.visible_message(span_notice("[user] hammers [M]'s [affecting.name]."), span_notice("I hammer [M]'s [affecting.name]."))
+		if(affecting.get_damage() == 0 && !length(affecting.wounds))//if the bodypart has no damage nor wounds on it...
+			if(M == user)
+				to_chat(user, span_warning("My [affecting.name] is undamaged."))
+			else
+				to_chat(user, span_warning("[M]'s [affecting.name] is undamaged."))
+			return
 	else //Non-construct.
 		to_chat(user, span_warning("I can't tinker on living flesh!"))
 

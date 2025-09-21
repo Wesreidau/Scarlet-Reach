@@ -57,12 +57,16 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	path = /obj/item/clothing/head/roguetown/bardhat
 
 /datum/loadout_item/spellcasterhat
-	name = "Spellcaster Hat"
-	path = /obj/item/clothing/head/roguetown/spellcasterhat
+	name = "Tattered Spellcaster Hat"
+	path = /obj/item/clothing/head/roguetown/spellcasterhat/light
 
 /datum/loadout_item/fancyhat
 	name = "Fancy Hat"
 	path = /obj/item/clothing/head/roguetown/fancyhat
+
+/datum/loadout_item/furhat
+	name = "Fur Hat"
+	path = /obj/item/clothing/head/roguetown/hatfur
 
 /datum/loadout_item/smokingcap
 	name = "Smoking Cap"
@@ -113,6 +117,50 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	name = "Tabard"
 	path = /obj/item/clothing/cloak/tabard
 
+/datum/loadout_item/tabard/astrata
+	name = "Astrata Tabard"
+	path = /obj/item/clothing/cloak/templar/astratan
+
+/datum/loadout_item/tabard/noc
+	name = "Noc Tabard"
+	path = /obj/item/clothing/cloak/tabard/crusader/noc
+
+/datum/loadout_item/tabard/dendor
+	name = "Dendor Tabard"
+	path = /obj/item/clothing/cloak/tabard/crusader/dendor
+
+/datum/loadout_item/tabard/malum
+	name = "Malum Tabard"
+	path = /obj/item/clothing/cloak/templar/malumite
+
+/datum/loadout_item/tabard/eora
+	name = "Eora Tabard"
+	path = /obj/item/clothing/cloak/templar/eoran
+
+/datum/loadout_item/tabard/pestra
+	name = "Pestra Tabard"
+	path = /obj/item/clothing/cloak/templar/pestran
+
+/datum/loadout_item/tabard/ravox
+	name = "Ravox Tabard"
+	path = /obj/item/clothing/cloak/templar/ravox
+
+/datum/loadout_item/tabard/abyssor
+	name = "Abyssor Tabard"
+	path = /obj/item/clothing/cloak/abyssortabard
+
+/datum/loadout_item/tabard/necra
+	name = "Necra Tabard"
+	path = /obj/item/clothing/cloak/templar/necran
+
+/datum/loadout_item/tabard/xylix
+	name = "Xylix Tabard"
+	path = /obj/item/clothing/cloak/templar/xylixian
+
+/datum/loadout_item/tabard/psydon
+	name = "Psydon Tabard"
+	path = /obj/item/clothing/cloak/templar/psydon
+
 /datum/loadout_item/surcoat
 	name = "Surcoat"
 	path = /obj/item/clothing/cloak/stabard
@@ -161,15 +209,30 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	name = "Rapscallion's Shawl"
 	path = /obj/item/clothing/cloak/thief_cloak
 
+/datum/loadout_item/wicker_cloak
+	name = "Wicker Cloak"
+	path = /obj/item/clothing/cloak/wickercloak
+
+/datum/loadout_item/cloudcutter_kaz_cloak
+	name = "Cloud Cutter Cloak"
+	path = /obj/item/clothing/cloak/eastcloak1
+
+/datum/loadout_item/leather_kaz_cloak
+	name = "Leather Cloak"
+	path = /obj/item/clothing/cloak/eastcloak2
+
+/datum/loadout_item/ladyshort_cloak
+	name = "Ladylike Shortcloak"
+	path = /obj/item/clothing/cloak/lordcloak/ladycloak
+
+/datum/loadout_item/forester_snow_cloak
+	name = "Snow Cloak"
+	path = /obj/item/clothing/cloak/forrestercloak/snow
+
 //SHOES
 /datum/loadout_item/darkboots
 	name = "Dark Boots"
 	path = /obj/item/clothing/shoes/roguetown/boots
-
-/datum/loadout_item/eastcloak2
-	name = "Leather Cloak"
-	path = /obj/item/clothing/cloak/eastcloak2
-
 
 /datum/loadout_item/babouche
 	name = "Babouche"
@@ -221,8 +284,8 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	path = /obj/item/clothing/suit/roguetown/shirt/robe
 
 /datum/loadout_item/spellcasterrobe
-	name = "Spellcaster Robe"
-	path = /obj/item/clothing/suit/roguetown/shirt/robe/spellcasterrobe
+	name = "Tattered Spellcaster Robe"
+	path = /obj/item/clothing/suit/roguetown/shirt/robe/spellcasterrobe/light
 
 /datum/loadout_item/formalsilks
 	name = "Formal Silks"
@@ -264,53 +327,57 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	name = "Dress"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gen
 
-/datum/loadout_item/bardress
-	name = "Bar Dress"
+/datum/loadout_item/dress/bardress
+	name = "Dress, Barmaid"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress
 
-/datum/loadout_item/chemise
+/datum/loadout_item/dress/chemise
 	name = "Chemise"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/silkdress
 
-/datum/loadout_item/sexydress
-	name = "Sexy Dress"
+/datum/loadout_item/dress/sexydress
+	name = "Dress, Sheer"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gen/sexy
 
-/datum/loadout_item/straplessdress
-	name = "Strapless Dress"
+/datum/loadout_item/dress/straplessdress
+	name = "Dress, Strapless"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gen/strapless
 
-/datum/loadout_item/straplessdress/alt
-	name = "Strapless Dress, alt"
+/datum/loadout_item/dress/straplessdress/alt
+	name = "Dress, Strapless (Alt)"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gen/strapless/alt
 
+/datum/loadout_item/dress/silkydress
+	name = "Dress, Silky"
+	path = /obj/item/clothing/suit/roguetown/shirt/dress/silkydress
+
+/datum/loadout_item/dress/nobledress
+	name = "Dress, Noble"
+	path = /obj/item/clothing/suit/roguetown/shirt/dress/noble
+
+/datum/loadout_item/dress/velvetdress
+	name = "Dress, Velvet"
+	path = /obj/item/clothing/suit/roguetown/shirt/dress/velvet
+
+/datum/loadout_item/dress/winterdress_light
+	name = "Dress, Cold"
+	path = /obj/item/clothing/suit/roguetown/shirt/dress/winterdress_light
+
 /datum/loadout_item/gown
-	name = "Spring Gown"
+	name = "Gown, Spring"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gown
 
 /datum/loadout_item/gown/summer
-	name = "Summer Gown"
+	name = "Gown, Summer"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gown/summergown
 
 /datum/loadout_item/gown/fall
-	name = "Fall Gown"
+	name = "Gown, Fall"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gown/fallgown
 
 /datum/loadout_item/gown/winter
-	name = "Winter Gown"
+	name = "Gown, Winter"
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/gown/wintergown
-
-/datum/loadout_item/gown/silkydress
-	name = "Silky Dress"
-	path = /obj/item/clothing/suit/roguetown/shirt/dress/silkydress
-
-/datum/loadout_item/nobledress
-	name = "Noble Dress"
-	path = /obj/item/clothing/suit/roguetown/shirt/dress/noble
-
-/datum/loadout_item/velvetdress
-	name = "Velvet Dress"
-	path = /obj/item/clothing/suit/roguetown/shirt/dress/velvet
 
 /datum/loadout_item/leathervest
 	name = "Leather Vest"
@@ -319,6 +386,22 @@ GLOBAL_LIST_EMPTY(loadout_items)
 /datum/loadout_item/nun_habit
 	name = "Nun Habit"
 	path = /obj/item/clothing/suit/roguetown/shirt/robe/nun
+
+/datum/loadout_item/worn_dobo_robe
+	name = "Worn Dobo Robe"
+	path = /obj/item/clothing/suit/roguetown/armor/basiceast/mentorsuit/light
+
+/datum/loadout_item/floral_robe
+	name = "Floral Robes"
+	path = /obj/item/clothing/suit/roguetown/armor/basiceast/captainrobe/light
+
+/datum/loadout_item/formal_robe
+	name = "Formal Dobo Robe"
+	path = /obj/item/clothing/suit/roguetown/armor/basiceast/crafteast/light
+
+/datum/loadout_item/ronin_robe
+	name = "Ronin Dobo Robe"
+	path = /obj/item/clothing/suit/roguetown/armor/basiceast/light
 
 /datum/loadout_item/eastshirt1
 	name = "Black Foreign Shirt"
@@ -335,6 +418,10 @@ GLOBAL_LIST_EMPTY(loadout_items)
 /datum/loadout_item/leathertights
 	name = "Leather Tights"
 	path = /obj/item/clothing/under/roguetown/trou/leathertights
+
+/datum/loadout_item/rumaclanpants
+	name = "Cut-Throat Pants"
+	path = /obj/item/clothing/under/roguetown/heavy_leather_pants/eastpants1/light
 
 /datum/loadout_item/trou
 	name = "Work Trousers"
@@ -353,18 +440,6 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	path = /obj/item/clothing/under/roguetown/skirt
 
 //ACCESSORIES
-/datum/loadout_item/stockings
-	name = "Stockings"
-	path = /obj/item/clothing/under/roguetown/tights/stockings
-
-/datum/loadout_item/silkstockings
-	name = "Silk Stockings"
-	path = /obj/item/clothing/under/roguetown/tights/stockings/silk
-
-/datum/loadout_item/fishnet
-	name = "Fishnet Stockings"
-	path = /obj/item/clothing/under/roguetown/tights/stockings/fishnet
-
 /datum/loadout_item/wrappings
 	name = "Handwraps"
 	path = /obj/item/clothing/wrists/roguetown/wrappings
@@ -417,14 +492,6 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	name = "Feather"
 	path = /obj/item/natural/feather
 
-/datum/loadout_item/collar
-	name = "Collar"
-	path = /obj/item/clothing/neck/roguetown/collar
-
-/datum/loadout_item/bell_collar
-	name = "Bell Collar"
-	path = /obj/item/clothing/neck/roguetown/collar/bell_collar
-
 /datum/loadout_item/cursed_collar
 	name = "Cursed Collar"
 	path = /obj/item/clothing/neck/roguetown/gorget/cursed_collar
@@ -432,6 +499,14 @@ GLOBAL_LIST_EMPTY(loadout_items)
 /datum/loadout_item/cloth_blindfold
 	name = "Cloth Blindfold"
 	path = /obj/item/clothing/mask/rogue/blindfold
+
+/datum/loadout_item/bases
+	name = "Cloth military skirt"
+	path = /obj/item/storage/belt/rogue/leather/battleskirt
+
+/datum/loadout_item/fauldedbelt
+	name = "Belt with faulds"
+	path = /obj/item/storage/belt/rogue/leather/battleskirt/faulds
 
 /datum/loadout_item/psicross
 	name = "Psydonian Cross"
@@ -448,6 +523,10 @@ GLOBAL_LIST_EMPTY(loadout_items)
 /datum/loadout_item/psicross/abyssor
 	name = "Amulet of Abyssor"
 	path = /obj/item/clothing/neck/roguetown/psicross/abyssor
+
+/datum/loadout_item/psicross/xylix
+	name = "Amulet of Xylix"
+	path = /obj/item/clothing/neck/roguetown/psicross/xylix
 
 /datum/loadout_item/psicross/dendor
 	name = "Amulet of Dendor"
@@ -476,6 +555,10 @@ GLOBAL_LIST_EMPTY(loadout_items)
 /datum/loadout_item/psicross/naledi
 	name = "Naledian Psy-Bracelet"
 	path = /obj/item/clothing/neck/roguetown/psicross/naledi
+
+/datum/loadout_item/zcross_iron
+	name = "Zizo Cross"
+	path = /obj/item/clothing/neck/roguetown/zcross/iron
 
 /datum/loadout_item/chaperon
 	name = "Chaperon (Normal)"
@@ -547,3 +630,27 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	name = "Donator Kit - Padded silky dress"
 	path = /obj/item/enchantingkit/zydras
 	ckeywhitelist = list("1ceres")
+
+/datum/loadout_item/leather_collar
+	name = "Leather Collar"
+	path = /obj/item/clothing/neck/roguetown/collar/leather
+
+/datum/loadout_item/cowbell_collar
+	name = "Cowbell Collar"
+	path = /obj/item/clothing/neck/roguetown/collar/cowbell
+
+/datum/loadout_item/catbell_collar
+	name = "Catbell Collar"
+	path = /obj/item/clothing/neck/roguetown/collar/catbell
+
+/datum/loadout_item/rope_leash
+	name = "Rope Leash"
+	path = /obj/item/leash
+
+/datum/loadout_item/leather_leash
+	name = "Leather Leash"
+	path = /obj/item/leash/leather
+
+/datum/loadout_item/chain_leash
+	name = "Chain Leash"
+	path = /obj/item/leash/chain

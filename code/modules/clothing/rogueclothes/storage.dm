@@ -65,6 +65,31 @@
 	sewrepair = FALSE
 	anvilrepair = /datum/skill/craft/armorsmithing
 
+/obj/item/storage/belt/rogue/leather/plaquesilver/outlaw
+	color = "#404040"
+
+
+/obj/item/storage/belt/rogue/leather/battleskirt
+	name = "cloth military skirt"
+	icon_state = "battleskirt"
+	sewrepair = FALSE
+	detail_tag = "_belt"
+
+/obj/item/storage/belt/rogue/leather/battleskirt/update_icon()
+	cut_overlays()
+	if(get_detail_tag())
+		var/mutable_appearance/pic = mutable_appearance(icon(icon, "[icon_state][detail_tag]"))
+		pic.appearance_flags = RESET_COLOR
+		if(get_detail_color())
+			pic.color = get_detail_color()
+		add_overlay(pic)
+
+/obj/item/storage/belt/rogue/leather/battleskirt/faulds
+	name = "belt with faulds"
+	icon_state = "faulds"
+	sewrepair = FALSE
+	detail_tag = "_belt"
+
 /obj/item/storage/belt/rogue/leather/steel
 	name = "steel belt"
 	icon_state = "steelplaque"
@@ -157,15 +182,20 @@
 	if(istype(H))
 		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
 			qdel(H)
-	H = new(loc)
-	if(istype(H))
-		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
-			qdel(H)
 	if(prob(50))
 		H = new(loc)
 		if(istype(H))
 			if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
 				qdel(H)
+	var/obj/item/roguecoin/gold/pile/G = new(loc)
+	if(istype(G))
+		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, G, null, TRUE, TRUE))
+			qdel(G)
+	if(prob(50))
+		G = new(loc)
+		if(istype(G))
+			if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, G, null, TRUE, TRUE))
+				qdel(G)
 
 /obj/item/storage/belt/rogue/pouch/coins/virtuepouch/Initialize()
 	. = ..()
@@ -199,6 +229,12 @@
 		/obj/item/natural/feather,
 		/obj/item/paper,
 	)
+
+/obj/item/storage/backpack/rogue/satchel/otavan
+	name = "otavan leather satchel"
+	desc = "A made to last leather bag from the Psydonian heart of Otava. It's Otava's finest."
+	icon_state = "osatchel"
+	item_state = "osatchel"
 
 /obj/item/storage/backpack/rogue/satchel/mule/PopulateContents()
 	for(var/i in 1 to 3)
@@ -399,6 +435,13 @@
 		knives += K
 	update_icon()
 
+/obj/item/storage/belt/rogue/leather/knifebelt/black/kazengun/Initialize()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/rogueweapon/huntingknife/throwingknife/kazengun/K = new()
+		knives += K
+	update_icon()
+
 /obj/item/storage/belt/rogue/leather/exoticsilkbelt
 	name = "exotic silk belt"
 	desc = "A gold adorned belt with the softest of silks barely concealing one's bits."
@@ -441,3 +484,120 @@
 	anvilrepair = /datum/skill/craft/blacksmithing
 	smeltresult = /obj/item/ingot/bronze
 	component_type = /datum/component/storage/concrete/grid/headhook/bronze
+
+/obj/item/clothing/climbing_gear
+	name = "climbing gear"
+	desc = "Lets you do the impossible."
+	color = null
+	icon = 'icons/roguetown/clothing/storage.dmi'
+	item_state = "climbing_gear" // sprites from lfwb kitbashed with grappler for inventory sprite
+	icon_state = "climbing_gear" // sprites from lfwb kitbashed among each other for onmob sprite
+	alternate_worn_layer = UNDER_CLOAK_LAYER
+	inhand_mod = FALSE
+	slot_flags = ITEM_SLOT_BACK
+
+/obj/item/clothing/climbing_gear/equipped(mob/living/carbon/human/user, slot)
+	. = ..()
+	playsound(loc, 'sound/items/garrotegrab.ogg', 100, TRUE)
+
+/obj/item/clothing/wall_grab
+	name = "wall"
+	item_state = "grabbing"
+	icon_state = "grabbing"
+	icon = 'icons/mob/roguehudgrabs.dmi'
+	max_integrity = 10
+	w_class = WEIGHT_CLASS_HUGE
+	item_flags = ABSTRACT
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
+	no_effect = TRUE
+
+/obj/item/clothing/wall_grab/dropped(mob/living/carbon/human/user)
+	. = ..()
+	if(QDELETED(src))
+		return
+	qdel(src)
+	var/turf/openspace = user.loc
+	openspace.zFall(user) // slop?
+
+/obj/item/clothing/wall_grab/intercept_zImpact(atom/movable/AM, levels = 1) // with this shit it doesn't generate "X falls through open space". thank u guppyluxx
+    . = ..()
+    . |= FALL_NO_MESSAGE
+
+/*
+/obj/item/clothing/wall_grab/Initialize()
+	. = ..()
+	ADD_TRAIT(src, TRAIT_NODROP, CURSED_ITEM_TRAIT)
+*/
+
+/obj/item/storage/belt/rogue/leather/smokebelt
+	name = "smokebomb belt"
+	desc = "A five-slotted belt meant for smokebombs. Little room left over."
+	icon_state = "knife"
+	item_state = "knife"
+	strip_delay = 20
+	var/max_storage = 5			//Javelin bag is 4 and they can't hold items. So, more fair having it like this since these are pretty decent weapons.
+	var/list/knives = list()
+	sewrepair = TRUE
+	component_type = /datum/component/storage/concrete/roguetown/belt/knife_belt
+
+/obj/item/storage/belt/rogue/leather/smokebelt/attack_turf(turf/T, mob/living/user)
+	if(knives.len >= max_storage)
+		to_chat(user, span_warning("Your [src.name] is full!"))
+		return
+	to_chat(user, span_notice("You begin to gather the ammunition..."))
+	for(var/obj/item/smokebomb/K in T.contents)
+		if(do_after(user, 5))
+			if(!eatknife(K))
+				break
+
+/obj/item/storage/belt/rogue/leather/smokebelt/proc/eatknife(obj/A)
+	if(A.type in typesof(/obj/item/smokebomb))
+		if(knives.len < max_storage)
+			A.forceMove(src)
+			knives += A
+			update_icon()
+			return TRUE
+		else
+			return FALSE
+
+/obj/item/storage/belt/rogue/leather/smokebelt/attackby(obj/A, loc, params)
+	if(A.type in typesof(/obj/item/smokebomb))
+		if(knives.len < max_storage)
+			if(ismob(loc))
+				var/mob/M = loc
+				M.doUnEquip(A, TRUE, src, TRUE, silent = TRUE)
+			else
+				A.forceMove(src)
+			knives += A
+			update_icon()
+			to_chat(usr, span_notice("I discreetly slip [A] into [src]."))
+		else
+			to_chat(loc, span_warning("Full!"))
+		return
+	..()
+
+/obj/item/storage/belt/rogue/leather/smokebelt/attack_right(mob/user)
+	if(knives.len)
+		var/obj/O = knives[knives.len]
+		knives -= O
+		O.forceMove(user.loc)
+		user.put_in_hands(O)
+		update_icon()
+		return TRUE
+
+/obj/item/storage/belt/rogue/leather/smokebelt/examine(mob/user)
+	. = ..()
+	if(knives.len)
+		. += span_notice("[knives.len] inside.")
+
+/obj/item/storage/belt/rogue/leather/smokebelt/black
+	icon_state = "blackknife"
+	item_state = "blackknife"
+
+
+/obj/item/storage/belt/rogue/leather/smokebelt/Initialize()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/smokebomb/K = new()
+		knives += K
+	update_icon()

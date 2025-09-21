@@ -20,7 +20,7 @@
 	created_item = /obj/item/roguestatue/iron
 
 /datum/anvil_recipe/valuables/aalloy
-	name = "Decrepit Statue"
+	name = "Statue"
 	req_bar = /obj/item/ingot/aalloy
 	created_item = /obj/item/roguestatue/aalloy
 
@@ -53,7 +53,7 @@
 	createditem_num = 3
 
 /datum/anvil_recipe/valuables/ringa
-	name = "Decrepit Rings 3x"
+	name = "Rings 3x"
 	req_bar = /obj/item/ingot/aalloy
 	created_item = /obj/item/clothing/ring/aalloy
 	createditem_num = 3
@@ -117,6 +117,16 @@
 	req_bar = /obj/item/ingot/gold
 	created_item = /obj/item/clothing/ring/signet
 
+/datum/anvil_recipe/valuables/signet/silver
+	name = "Blessed Silver Signet Ring"
+	req_bar = /obj/item/ingot/silverblessed
+	created_item = /obj/item/clothing/ring/signet/silver	
+
+/datum/anvil_recipe/valuables/signet/silver/inq
+	name = "Blessed Silver Signet Ring"
+	req_bar = /obj/item/ingot/silverblessed/bullion
+	created_item = /obj/item/clothing/ring/signet/silver
+
 // Silver ingots are now in play, and as such, the steel rings have been converted to silver with their value adjusted accordingly. -Kyogon
 
 /datum/anvil_recipe/valuables/emerings
@@ -161,6 +171,7 @@
 	additional_items = list(/obj/item/ingot/gold, /obj/item/ingot/steel, /obj/item/roguegem/ruby)
 	created_item = /obj/item/rogueweapon/sword/long/exe/cloth
 	craftdiff = 3
+	appro_skill = /datum/skill/craft/weaponsmithing
 	i_type = "Weapons"
 
 /datum/anvil_recipe/valuables/dragon
@@ -169,3 +180,9 @@
 	additional_items = list(/obj/item/ingot/gold, /obj/item/roguegem/blue, /obj/item/roguegem/violet, /obj/item/clothing/neck/roguetown/psicross/silver)
 	created_item = /obj/item/clothing/ring/dragon_ring
 	craftdiff = 6
+
+/datum/anvil_recipe/valuables/zcross_iron
+	name = "Inverted Psycross (1 iron)"
+	req_bar = /obj/item/ingot/iron
+	created_item = /obj/item/clothing/neck/roguetown/zcross/iron
+	craftdiff = 1

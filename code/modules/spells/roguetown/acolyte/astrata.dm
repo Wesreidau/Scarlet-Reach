@@ -1,30 +1,36 @@
 /obj/effect/proc_holder/spell/invoked/projectile/lightningbolt/sacred_flame_rogue
 	name = "Sacred Flame"
 	overlay_state = "sacredflame"
+	sound = 'sound/magic/bless.ogg'
 	req_items = list(/obj/item/clothing/neck/roguetown/psicross)
 	invocation = null
 	invocation_type = "shout"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	recharge_time = 25 SECONDS
+	recharge_time = 20 SECONDS
 	miracle = TRUE
 	devotion_cost = 100
-	projectile_type = /obj/projectile/magic/lightning/astratablast
+	projectile_type = /obj/projectile/magic/astratablast
 
-/obj/projectile/magic/lightning/astratablast
-	damage = 10 
+
+/obj/projectile/magic/astratablast
+	damage = 25
 	name = "ray of holy fire"
+	nodamage = FALSE
 	damage_type = BURN
+	speed = 0.3
+	muzzle_type = null
+	impact_type = null
+	hitscan = TRUE
 	flag = "magic"
 	light_color = "#a98107"
 	light_outer_range = 7
 	tracer_type = /obj/effect/projectile/tracer/solar_beam
-	var/fuck_that_guy_multiplier = 2.5
+	var/fuck_that_guy_multiplier = 2
 	var/biotype_we_look_for = MOB_UNDEAD
 
-/obj/projectile/magic/lightning/astratablast/on_hit(target)
+/obj/projectile/magic/astratablast/on_hit(target)
 	. = ..()
-
 	if(ismob(target))
 		var/mob/living/M = target
 		if(M.anti_magic_check())
@@ -34,9 +40,13 @@
 			return BULLET_ACT_BLOCK
 		if(M.mob_biotypes & biotype_we_look_for || istype(M, /mob/living/simple_animal/hostile/rogue/skeleton))
 			damage *= fuck_that_guy_multiplier
-			M.adjust_fire_stacks(4)
+			M.adjust_fire_stacks(10) //4 pats to put it out
+			visible_message(span_warning("[target] erupts in flame upon being struck by [src]!"))
 			M.IgniteMob()
-			visible_message(span_warning("[src] ignites [target] in holy flame!"))
+		else
+			M.adjust_fire_stacks(4) //2 pats to put it out
+			visible_message(span_warning("[src] ignites [target]!"))
+			M.IgniteMob()
 	return FALSE
 
 /obj/effect/proc_holder/spell/invoked/ignition
@@ -59,7 +69,7 @@
 	miracle = TRUE
 	devotion_cost = 10
 
-/obj/effect/proc_holder/spell/invoked/sacred_flame_rogue/cast(list/targets, mob/user = usr)
+/obj/effect/proc_holder/spell/invoked/ignition/cast(list/targets, mob/user = usr)
 	. = ..()
 	// Spell interaction with ignitable objects (burn wooden things, light torches up)
 	if(isobj(targets[1]))
@@ -116,6 +126,13 @@
 				return FALSE
 			}
 		}
+		var/mob/dead/observer/spirit = target.get_spirit()
+		//GET OVER HERE!
+		if(spirit)
+			var/mob/dead/observer/ghost = spirit.ghostize()
+			qdel(spirit)
+			ghost.mind.transfer_to(target, TRUE)
+		target.grab_ghost(force = FALSE)
 		if(!target.mind)
 			revert_cast()
 			return FALSE
@@ -124,7 +141,7 @@
 			revert_cast()
 			return FALSE
 		if(!target.mind.active)
-			to_chat(user, "Astrata is not done with [target], yet.")
+			to_chat(user, "[target] will not return from afterlife.")
 			revert_cast()
 			return FALSE
 		if(target == user)
@@ -134,30 +151,26 @@
 			to_chat(user, span_warning("Nothing happens."))
 			revert_cast()
 			return FALSE
+		if(HAS_TRAIT(target, TRAIT_HOLLOW_LIFE))
+			to_chat(user, span_bloody("Astrata scorns this one, for reasons unknown. Lux infusal is the only option."))
+			target.adjustFireLoss(30)
+			target.fire_act(1,5)
+			revert_cast()
+			return FALSE
 		if(GLOB.tod == "night")
 			to_chat(user, span_warning("Let there be light."))
 		for(var/obj/structure/fluff/psycross/S in oview(5, user))
 			S.AOE_flash(user, range = 8)
-		if(target.mob_biotypes & MOB_UNDEAD) //positive energy harms the undead
+		if((target.mob_biotypes & MOB_UNDEAD) && !HAS_TRAIT(target, TRAIT_HOLLOW_LIFE)) //positive energy harms the undead
 			target.visible_message(span_danger("[target] is unmade by holy light!"), span_userdanger("I'm unmade by holy light!"))
 			target.gib()
 			return TRUE
-		if(alert(target, "They are calling for you. Are you ready?", "Revival", "I need to wake up", "Don't let me go") != "I need to wake up")
-			target.visible_message(span_notice("Nothing happens. They are not being let go."))
-			return FALSE
 		target.adjustOxyLoss(-target.getOxyLoss()) //Ye Olde CPR
 		if(!target.revive(full_heal = FALSE))
 			to_chat(user, span_warning("Nothing happens."))
 			revert_cast()
 			return FALSE
 		testing("revived2")
-		var/mob/living/carbon/spirit/underworld_spirit = target.get_spirit()
-		//GET OVER HERE!
-		if(underworld_spirit)
-			var/mob/dead/observer/ghost = underworld_spirit.ghostize()
-			qdel(underworld_spirit)
-			ghost.mind.transfer_to(target, TRUE)
-		target.grab_ghost(force = TRUE) // even suicides
 		target.emote("breathgasp")
 		target.Jitter(100)
 		GLOB.scarlet_round_stats[STATS_ASTRATA_REVIVALS]++

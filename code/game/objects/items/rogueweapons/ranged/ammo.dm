@@ -86,7 +86,7 @@
 	projectile_type = /obj/projectile/bullet/reusable/arrow
 	caliber = "arrow"
 	icon = 'icons/roguetown/weapons/ammo.dmi'
-	icon_state = "stonearrow"
+	icon_state = "arrow"
 	force = 10
 	dropshrink = 0.6
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/thrust)
@@ -170,7 +170,7 @@
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/iron
 
 	damage = 40
-	armor_penetration = 20
+	armor_penetration = 0
 	embedchance = 30
 	npc_damage_mult = 2
 
@@ -616,6 +616,11 @@
 			H.visible_message("<font color='white'>The silver weapon weakens the curse temporarily!</font>")
 			to_chat(H, span_userdanger("I'm hit by my BANE!"))
 			H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
+			src.last_used = world.time
+		if(HAS_TRAIT(H, TRAIT_HOLLOW_LIFE))
+			H.visible_message("<font color='white'>The silver weapon weakens the damned temporarily!</font>")
+			to_chat(H, span_userdanger("I'm hit by my BANE!"))
+			H.apply_status_effect(/datum/status_effect/debuff/silver_curse_weaker)
 			src.last_used = world.time
 	return
 

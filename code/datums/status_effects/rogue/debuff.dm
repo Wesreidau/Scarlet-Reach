@@ -49,6 +49,17 @@
 	desc = "My BANE!"
 	icon_state = "hunger3"
 
+/datum/status_effect/debuff/silver_curse_weaker
+	id = "silver_curse_weaker"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/silver_curse_weaker
+	effectedstats = list("strength" = -1,"perception" = -1,"intelligence" = -1, "speed" = -1)
+	duration = 20 SECONDS
+
+/atom/movable/screen/alert/status_effect/debuff/silver_curse_weaker
+	name = "Silver Curse, Lesser"
+	desc = "My BANE!"
+	icon_state = "hunger3"
+
 ////////////////////
 
 
@@ -265,7 +276,7 @@
 	owner.remove_movespeed_modifier("SUBMISSIVE")
 
 /atom/movable/screen/alert/status_effect/debuff/submissive
-	name = "Compliant"
+	name = "Conformable"
 	desc = "Falling in line is my only choice."
 
 /datum/status_effect/debuff/chilled
@@ -418,3 +429,113 @@
 	effectedstats = list("strength" = -1, "endurance" = -2, "speed" = -2, "intelligence" = -3)
 	duration = 1 MINUTES
 	alert_type = /atom/movable/screen/alert/status_effect/emberwine
+
+/datum/status_effect/debuff/excomm
+	id = "Excommunicated follower of Ten!"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/excomm
+	effectedstats = list("fortune" = -2, "intelligence" = -2, "speed" = -1, "endurance" = -1, "constitution" = -1)
+	duration = 999 MINUTES
+
+/atom/movable/screen/alert/status_effect/debuff/excomm
+	name = "Excommunicated follower of Ten!"
+	desc = "The Ten have forsaken me!"
+	icon_state = "muscles"
+	color ="#6d1313"
+
+/datum/status_effect/debuff/apostasy
+	id = "Apostasy!"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/apostasy
+	effectedstats = list("fortune" = -5, "intelligence" = -3, "perception" = -2 , "speed" = -2, "endurance" = -2, "constitution" = -2)
+	duration = 999 MINUTES
+
+/atom/movable/screen/alert/status_effect/debuff/apostasy
+	name = "Apostasy!"
+	desc = "Shame upon the member of clergy!"
+	icon_state = "debuff"
+	color ="#7a0606"
+
+/datum/status_effect/debuff/hereticsermon
+	id = "Heretic on sermon!"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/hereticsermon
+	effectedstats = list("intelligence" = -2, "speed" = -2, "fortune" = -2)
+	duration = 20 MINUTES
+
+/atom/movable/screen/alert/status_effect/debuff/hereticsermon
+	name = "Heretic on sermon!"
+	desc = "I was on the sermon. My patron is not proud of me."
+	icon_state = "debuff"
+	color ="#af9f9f"
+
+/datum/status_effect/debuff/cold
+	id = "Frostveiled"
+	alert_type =  /atom/movable/screen/alert/status_effect/debuff/cold
+	effectedstats = list("speed" = -2)
+	duration = 12 SECONDS
+
+/datum/status_effect/debuff/cold/on_apply()
+	. = ..()
+	var/mob/living/target = owner
+	var/newcolor = rgb(136, 191, 255)
+	target.add_atom_colour(newcolor, TEMPORARY_COLOUR_PRIORITY)
+	addtimer(CALLBACK(target, TYPE_PROC_REF(/atom, remove_atom_colour), TEMPORARY_COLOUR_PRIORITY, newcolor), 12 SECONDS)
+
+/atom/movable/screen/alert/status_effect/debuff/cold
+	name = "Cold"
+	desc = "Something has chilled me to the bone! It's hard to move."
+	icon_state = "muscles"
+
+///////////////////////
+/// CLIMBING STUFF ///
+/////////////////////
+
+/// OPEN SPACE TURF BASED CLIMBING, MOB DRAG-DROP TILE
+/datum/status_effect/debuff/climbing_lfwb
+	id = "climbing_lfwb"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/climbing_lfwb
+	tick_interval = 10
+
+/datum/status_effect/debuff/climbing_lfwb/on_apply()
+	. = ..()
+	var/mob/living/climber = owner
+	climber.climbing = TRUE
+	climber.put_in_hands(new /obj/item/clothing/wall_grab, TRUE, FALSE, TRUE) // gotta have new before /obj/... , otherwise its gonna die
+
+/datum/status_effect/debuff/climbing_lfwb/tick() // do we wanna do this shit every single second? I guess we do boss
+	. = ..()
+	var/mob/living/carbon/human/climber = owner
+	var/baseline_stamina_cost = 35 // have to disable stamina regen while on wall bruh in energystamina.dm
+	var/climb_gear_bonus = 1
+	if((istype(climber.backr, /obj/item/clothing/climbing_gear)) || (istype(climber.backl, /obj/item/clothing/climbing_gear)))
+		climb_gear_bonus = 2
+	var/climbing_skill = max(climber.get_skill_level(/datum/skill/misc/climbing), SKILL_LEVEL_NOVICE) // freestyla hugboxed my shitcode FVCK
+	var/stamina_cost_final = round(((baseline_stamina_cost / climbing_skill) / climb_gear_bonus), 1) // each END is 10 stam, each athletics is 5 stam
+//	to_chat(climber, span_warningbig("[stamina_cost_final] REMOVED!")) // debug msg
+	climber.stamina_add(stamina_cost_final) // every tick interval this much stamina is deducted
+	var/turf/tile_under_climber = climber.loc
+	var/list/branch_under_climber = list()
+	for(var/obj/structure/flora/newbranch/branch in climber.loc)
+		branch_under_climber += branch
+	if(!istype(tile_under_climber, /turf/open/transparent/openspace))// if we aren't on open space turf, remove debuff (aka our feet are on solid shi or water)
+		climber.remove_status_effect(/datum/status_effect/debuff/climbing_lfwb)
+	if(branch_under_climber.len) // branches dont remove open space turf, so we have to check for it separately
+		climber.remove_status_effect(/datum/status_effect/debuff/climbing_lfwb)
+	else if(climber.stamina >= climber.max_stamina) // if we run out of green bar stamina, we fall
+		to_chat(climber, span_dead("I can't hold onto the ledge for any longer!"))
+		climber.remove_status_effect(/datum/status_effect/debuff/climbing_lfwb)
+		tile_under_climber.zFall(climber)
+
+
+/datum/status_effect/debuff/climbing_lfwb/on_remove()
+	. = ..()
+	var/mob/living/climber = owner
+	climber.climbing = FALSE
+	if(climber.is_holding_item_of_type(/obj/item/clothing/wall_grab)) // the slop slops itself holy shit
+		for(var/obj/item/clothing/wall_grab/I in climber.held_items)
+			if(istype(I, /obj/item/clothing/wall_grab))
+				qdel(I)
+				return
+
+/atom/movable/screen/alert/status_effect/debuff/climbing_lfwb
+	name = "Climbing..."
+	desc = ""
+	icon_state = "muscles"
